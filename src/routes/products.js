@@ -6,6 +6,11 @@ const { v4: uuidv4 } = require("uuid");
 const { Product, Category } = require("../db");
 const productController = require("../controllers/products");
 
+const { uploadImage } = require("../utils/cloudinary");
+
+const fs = require("fs-extra");
+const fileUpload = require("express-fileupload");
+
 router.get("/banned", async (req, res) => {
   try {
     const products = await productController.getAllProductsAndBanned();
@@ -78,27 +83,45 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
-  const { name, categoryId } = req.body;
+router.post(
+  "/",
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "./uploads",
+  }),
+  async (req, res) => {
+    const { name, categoryId } = req.body;
 
-  if (!name) return res.status(400).json("Falta el nombre del producto!");
-  if (!categoryId)
-    return res.status(400).json("Falta la categoría del producto!");
+    if (!name) return res.status(400).json("Falta el nombre del producto!");
+    if (!categoryId)
+      return res.status(400).json("Falta la categoría del producto!");
 
-  try {
-    const productExists = await Product.findOne({ where: { name } });
-    if (productExists) return res.status(400).json("El producto ya existe!");
+    try {
+      const productExists = await Product.findOne({ where: { name } });
+      if (productExists) return res.status(400).json("El producto ya existe!");
 
-    const productCreated = await productController.createProduct(
-      name,
-      categoryId
-    );
-
-    res.status(201).json(productCreated);
-  } catch (error) {
-    res.status(400).json(error.message);
+      if (req.files?.image) {
+        const result = await uploadImage(req.files.image.tempFilePath);
+        const productCreated = await productController.createProduct(
+          name,
+          categoryId,
+          result.secure_url,
+          result.public_id
+        );
+        await fs.unlink(req.files.image.tempFilePath);
+        res.status(201).json(productCreated);
+      } else {
+        const productCreated = await productController.createProduct(
+          name,
+          categoryId
+        );
+        res.status(201).json(productCreated);
+      }
+    } catch (error) {
+      res.status(400).json(error.message);
+    }
   }
-});
+);
 
 router.put("/:id", async (req, res) => {
   const { id } = req.params;

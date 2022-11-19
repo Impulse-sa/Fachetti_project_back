@@ -76,12 +76,14 @@ const getAllPublications = async () => {
   }
 };
 
-const createPublication = async (title, description) => {
+const createPublication = async (title, description, image, image_id) => {
   try {
     const publicationCreated = await Publication.create({
       id: uuidv4(),
       title,
       description,
+      image,
+      image_id,
     });
 
     return publicationCreated;

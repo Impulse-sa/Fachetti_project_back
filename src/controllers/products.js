@@ -158,6 +158,22 @@ const setBanned = async (id, banned) => {
   }
 };
 
+const updateProduct = async (id, data) => {
+  try {
+    const productUpdated = await Product.update(data, {
+      where: {
+        id,
+      },
+    });
+    if (productUpdated) {
+      const product = await getProductById(id);
+      return product;
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 module.exports = {
   createProduct,
   getAllProducts,
@@ -166,4 +182,5 @@ module.exports = {
   setBanned,
   getAllProductsByCategory,
   getAllProductsByCategoryAndBanned,
+  updateProduct,
 };

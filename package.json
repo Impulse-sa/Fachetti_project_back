@@ -35,6 +35,10 @@
   },
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": ">=12.18.3",
+    "npm": ">=6.14.6"
+  },
   "bugs": {
     "url": "https://github.com/Impulse-sa/Fachetti_project_back/issues"
   },

@@ -1,4 +1,4 @@
-const { Category } = require("../db");
+const { Category, Product } = require("../db");
 
 const { v4: uuidv4 } = require("uuid");
 
@@ -83,6 +83,16 @@ const setBanned = async (id, banned) => {
       }
     );
     if (categoryUpdated) {
+      await Product.update(
+        { isBanned: banned },
+        {
+          include: Category,
+          where: {
+            categoryId: id,
+          },
+        }
+      );
+
       const categoryById = await getCategoryById(id);
       return categoryById;
     }

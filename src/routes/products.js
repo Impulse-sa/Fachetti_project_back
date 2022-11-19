@@ -112,4 +112,16 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+router.put("/edit/:id", async (req, res) => {
+  const { id } = req.params;
+  const data = req.body;
+
+  try {
+    const productUpdated = await productController.updateProduct(id, data);
+    if (productUpdated) res.status(200).json(productUpdated);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+});
+
 module.exports = router;

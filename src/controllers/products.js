@@ -14,6 +14,7 @@ const getProductById = async (id) => {
       id: dbResult.id,
       name: dbResult.name,
       image: dbResult.image,
+      isBanned: dbResult.isBanned,
       category: dbResult.category.name,
     };
 
@@ -38,6 +39,7 @@ const getAllProducts = async () => {
         id: r.id,
         name: r.name,
         image: r.image,
+        isBanned: r.isBanned,
         category: r.category.name,
       });
     });
@@ -67,6 +69,7 @@ const getAllProductsByCategory = async (category) => {
         id: r.id,
         name: r.name,
         image: r.image,
+        isBanned: r.isBanned,
         category: r.category.name,
       });
     });
@@ -93,6 +96,7 @@ const getAllProductsByCategoryAndBanned = async (category) => {
         id: r.id,
         name: r.name,
         image: r.image,
+        isBanned: r.isBanned,
         category: r.category.name,
       });
     });
@@ -114,6 +118,7 @@ const getAllProductsAndBanned = async () => {
         id: r.id,
         name: r.name,
         image: r.image,
+        isBanned: r.isBanned,
         category: r.category.name,
       });
     });

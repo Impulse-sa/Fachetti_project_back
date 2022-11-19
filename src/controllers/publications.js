@@ -16,6 +16,8 @@ const getImportantPublications = async () => {
         id: p.id,
         title: p.title,
         description: p.description,
+        isBanned: p.isBanned,
+        isImportant: p.isImportant,
         image: p.image,
       });
     });
@@ -36,6 +38,8 @@ const getAllPublicationsAndBanned = async () => {
         id: p.id,
         title: p.title,
         description: p.description,
+        isBanned: p.isBanned,
+        isImportant: p.isImportant,
         image: p.image,
       });
     });
@@ -60,6 +64,8 @@ const getAllPublications = async () => {
         id: p.id,
         title: p.title,
         description: p.description,
+        isBanned: p.isBanned,
+        isImportant: p.isImportant,
         image: p.image,
       });
     });
@@ -92,6 +98,8 @@ const getPublicationById = async (id) => {
       id: publication.id,
       title: publication.title,
       description: publication.description,
+      isBanned: publication.isBanned,
+      isImportant: publication.isImportant,
       image: publication.image,
     };
     return result;

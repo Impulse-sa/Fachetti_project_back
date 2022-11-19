@@ -26,6 +26,11 @@ module.exports = (sequelize) => {
       phone: {
         type: DataTypes.STRING,
         allowNull: true,
+        defaultValue: null,
+      },
+      isAnswered: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
     },
     {

@@ -31,6 +31,10 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         defaultValue: null,
       },
+      image_id: {
+        type: DataTypes.STRING,
+        defaultValue: null,
+      },
     },
     {
       timestamps: true,

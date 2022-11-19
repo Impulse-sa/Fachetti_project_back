@@ -15,6 +15,10 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      image_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       isLanding: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,

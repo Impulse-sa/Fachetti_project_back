@@ -62,7 +62,7 @@ router.get("/:id", async (req, res) => {
   try {
     const product = await productController.getProductById(id);
 
-    if (!product) return res.status(400).json("Producto no encontrado!");
+    if (!product) return res.status(404).json("Producto no encontrado!");
 
     res.status(200).json(product);
   } catch (error) {

@@ -24,7 +24,7 @@ router.get("/", async (req, res) => {
     const images = await imageController.getAllImages();
 
     if (!images.length)
-      return res.status(400).json("No hay imagenes guardadas!");
+      return res.status(200).json("No hay imagenes guardadas!");
 
     res.status(200).json(images);
   } catch (error) {

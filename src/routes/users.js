@@ -13,8 +13,8 @@ router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    if (!email) return res.status(404).json("Falta email del usuario!");
-    if (!password) return res.status(404).json("Falta password del usuario!");
+    if (!email) return res.status(400).json("Falta email del usuario!");
+    if (!password) return res.status(400).json("Falta password del usuario!");
 
     const userEmail = await User.findOne({ where: { email } });
     if (!userEmail) throw new Error("Email no encontrado!");
@@ -42,8 +42,8 @@ router.post("/login", async (req, res) => {
 router.post("/", async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email) return res.status(404).json("Falta email del usuario!");
-  if (!password) return res.status(404).json("Falta password del usuario!");
+  if (!email) return res.status(400).json("Falta email del usuario!");
+  if (!password) return res.status(400).json("Falta password del usuario!");
 
   try {
     const emailExist = await User.findOne({

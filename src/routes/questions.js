@@ -23,20 +23,20 @@ router.get("/", async (req, res) => {
   try {
     if (answered === "true") {
       const questions = await questionController.getAllQuestionsAnswered();
-      if (!questions.length) return res.status(404).json("No hay consultas!");
+      if (!questions.length) return res.status(200).json("No hay consultas!");
 
       return res.status(200).json(questions);
     }
 
     if (answered === "false") {
       const questions = await questionController.getAllQuestionsNotAnswered();
-      if (!questions.length) return res.status(404).json("No hay consultas!");
+      if (!questions.length) return res.status(200).json("No hay consultas!");
 
       return res.status(200).json(questions);
     }
 
     const questions = await questionController.getAllQuestions();
-    if (!questions.length) return res.status(404).json("No hay consultas!");
+    if (!questions.length) return res.status(200).json("No hay consultas!");
 
     res.status(200).json(questions);
   } catch (error) {

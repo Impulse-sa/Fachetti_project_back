@@ -7,7 +7,7 @@ router.get("/banned", async (req, res) => {
   try {
     const reviews = await reviewController.getAllReviewsAndBanned();
 
-    if (!reviews.length) return res.status(404).json("No hay reviews!");
+    if (!reviews.length) return res.status(200).json("No hay reviews!");
 
     res.status(200).json(reviews);
   } catch (error) {
@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
   try {
     const reviews = await reviewController.getAllReviews();
 
-    if (!reviews.length) return res.status(404).json("No hay reviews!");
+    if (!reviews.length) return res.status(200).json("No hay reviews!");
 
     res.status(200).json(reviews);
   } catch (error) {

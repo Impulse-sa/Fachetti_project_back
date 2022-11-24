@@ -12,7 +12,7 @@ router.get("/banned", async (req, res) => {
     const publications =
       await publicationController.getAllPublicationsAndBanned();
     if (!publications.length)
-      return res.status(404).json("No hay publicaciones guardadas!");
+      return res.status(200).json("No hay publicaciones guardadas!");
 
     res.status(200).json(publications);
   } catch (error) {
@@ -24,7 +24,7 @@ router.get("/important", async (req, res) => {
   try {
     const publications = await publicationController.getImportantPublications();
     if (!publications.length)
-      return res.status(404).json("No hay publicaciones destacadas!");
+      return res.status(200).json("No hay publicaciones destacadas!");
 
     res.status(200).json(publications);
   } catch (error) {
@@ -49,7 +49,7 @@ router.get("/", async (req, res) => {
   try {
     const publications = await publicationController.getAllPublications();
     if (!publications.length)
-      return res.status(404).json("No hay publicaciones guardadas!");
+      return res.status(200).json("No hay publicaciones guardadas!");
 
     res.status(200).json(publications);
   } catch (error) {

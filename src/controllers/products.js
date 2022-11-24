@@ -138,6 +138,7 @@ const createProduct = async (name, categoryId, image, image_id) => {
     const productCreated = await Product.create({
       name,
       categoryId,
+      description,
       id: uuidv4(),
       image,
       image_id,

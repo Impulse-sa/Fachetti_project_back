@@ -90,11 +90,13 @@ router.post(
     tempFileDir: "./uploads",
   }),
   async (req, res) => {
-    const { name, categoryId } = req.body;
+    const { name, description, categoryId } = req.body;
 
     if (!name) return res.status(400).json("Falta el nombre del producto!");
     if (!categoryId)
       return res.status(400).json("Falta la categoría del producto!");
+    if (!description)
+      return res.status(400).json("Falta la descripcion del producto!");
 
     try {
       const productExists = await Product.findOne({ where: { name } });
@@ -104,6 +106,7 @@ router.post(
         const result = await uploadImage(req.files.image.tempFilePath);
         const productCreated = await productController.createProduct(
           name,
+          description,
           categoryId,
           result.secure_url,
           result.public_id

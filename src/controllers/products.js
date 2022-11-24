@@ -13,6 +13,7 @@ const getProductById = async (id) => {
     const result = {
       id: dbResult.id,
       name: dbResult.name,
+      description: dbResult.description,
       image: dbResult.image,
       isBanned: dbResult.isBanned,
       category: dbResult.category.name,
@@ -38,6 +39,7 @@ const getAllProducts = async () => {
       results.push({
         id: r.id,
         name: r.name,
+        description: r.description,
         image: r.image,
         isBanned: r.isBanned,
         category: r.category.name,
@@ -68,6 +70,7 @@ const getAllProductsByCategory = async (category) => {
       results.push({
         id: r.id,
         name: r.name,
+        description: r.description,
         image: r.image,
         isBanned: r.isBanned,
         category: r.category.name,
@@ -95,6 +98,7 @@ const getAllProductsByCategoryAndBanned = async (category) => {
       results.push({
         id: r.id,
         name: r.name,
+        description: r.description,
         image: r.image,
         isBanned: r.isBanned,
         category: r.category.name,
@@ -117,6 +121,7 @@ const getAllProductsAndBanned = async () => {
       results.push({
         id: r.id,
         name: r.name,
+        description: r.description,
         image: r.image,
         isBanned: r.isBanned,
         category: r.category.name,

@@ -133,7 +133,13 @@ const getAllProductsAndBanned = async () => {
   }
 };
 
-const createProduct = async (name, categoryId, image, image_id) => {
+const createProduct = async (
+  name,
+  categoryId,
+  description,
+  image,
+  image_id
+) => {
   try {
     const productCreated = await Product.create({
       name,

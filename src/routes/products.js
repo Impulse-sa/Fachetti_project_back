@@ -116,7 +116,8 @@ router.post(
       } else {
         const productCreated = await productController.createProduct(
           name,
-          categoryId
+          categoryId,
+          description
         );
         res.status(201).json(productCreated);
       }

@@ -15,7 +15,7 @@ router.get("/banned", async (req, res) => {
   try {
     const products = await productController.getAllProductsAndBanned();
     if (!products.length) {
-      return res.status(200).json("No se encontraron productos!");
+      return res.status(404).json("No se encontraron productos!");
     }
 
     return res.status(200).json(products);
@@ -30,7 +30,7 @@ router.get("/categories/:category", async (req, res) => {
     const products = await productController.getAllProductsByCategory(category);
     if (!products.length)
       return res
-        .status(200)
+        .status(404)
         .json("No se encontraron productos de esa categoría");
 
     return res.status(200).json(products);
@@ -47,7 +47,7 @@ router.get("/categories/:category/banned", async (req, res) => {
     );
     if (!products.length)
       return res
-        .status(200)
+        .status(404)
         .json("No se encontraron productos de esa categoría");
 
     return res.status(200).json(products);
@@ -62,7 +62,7 @@ router.get("/:id", async (req, res) => {
   try {
     const product = await productController.getProductById(id);
 
-    if (!product) return res.status(400).json("Producto no encontrado!");
+    if (!product) return res.status(404).json("Producto no encontrado!");
 
     res.status(200).json(product);
   } catch (error) {
@@ -74,7 +74,7 @@ router.get("/", async (req, res) => {
   try {
     const products = await productController.getAllProducts();
     if (!products.length) {
-      return res.status(200).json("No se encontraron productos!");
+      return res.status(404).json("No se encontraron productos!");
     }
 
     return res.status(200).json(products);

@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
     const categories = await categoryController.getAllCategories();
 
     if (!categories.length) {
-      return res.status(200).json("No se encontraron categorías!");
+      return res.status(404).json("No se encontraron categorías!");
     }
 
     return res.status(200).json(categories);
@@ -23,7 +23,7 @@ router.get("/banned", async (req, res) => {
     const categories = await categoryController.getAllCategoriesAndBanned();
 
     if (!categories.length) {
-      return res.status(200).json("No se encontraron categorías!");
+      return res.status(404).json("No se encontraron categorías!");
     }
 
     return res.status(200).json(categories);

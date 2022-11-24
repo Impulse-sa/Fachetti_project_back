@@ -135,8 +135,8 @@ const getAllProductsAndBanned = async () => {
 
 const createProduct = async (
   name,
-  categoryId,
   description,
+  categoryId,
   image,
   image_id
 ) => {

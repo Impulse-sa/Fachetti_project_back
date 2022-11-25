@@ -20,6 +20,15 @@ module.exports = (sequelize) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: null,
+      },
+      image_id: {
+        type: DataTypes.STRING,
+        defaultValue: null,
+      },
     },
     {
       timestamps: true,

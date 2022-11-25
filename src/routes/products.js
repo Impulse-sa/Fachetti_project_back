@@ -11,6 +11,9 @@ const { uploadImage } = require("../utils/cloudinary");
 const fs = require("fs-extra");
 const fileUpload = require("express-fileupload");
 
+const jwt = require("../config/auth");
+const auth = require("../config/auth");
+
 router.get("/banned", async (req, res) => {
   try {
     const products = await productController.getAllProductsAndBanned();
@@ -85,6 +88,7 @@ router.get("/", async (req, res) => {
 
 router.post(
   "/",
+  auth,
   fileUpload({
     useTempFiles: true,
     tempFileDir: "./uploads",

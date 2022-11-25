@@ -88,7 +88,6 @@ router.get("/", async (req, res) => {
 
 router.post(
   "/",
-  auth,
   fileUpload({
     useTempFiles: true,
     tempFileDir: "./uploads",

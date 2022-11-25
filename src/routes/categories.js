@@ -3,6 +3,8 @@ const router = Router();
 
 const { Category } = require("../db");
 const categoryController = require("../controllers/categories");
+
+const fs = require("fs-extra");
 const fileUpload = require("express-fileupload");
 const { uploadImage } = require("../utils/cloudinary");
 

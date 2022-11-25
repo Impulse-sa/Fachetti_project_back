@@ -31,7 +31,9 @@ const getImportantPublications = async () => {
 const getAllPublicationsAndBanned = async () => {
   const results = [];
   try {
-    const publications = await Publication.findAll();
+    const publications = await Publication.findAll({
+      order: ["createdAt", "DESC"],
+    });
 
     publications.forEach((p) => {
       results.push({
@@ -54,6 +56,7 @@ const getAllPublications = async () => {
   const results = [];
   try {
     const publications = await Publication.findAll({
+      order: ["createdAt", "DESC"],
       where: {
         isBanned: false,
       },

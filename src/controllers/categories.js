@@ -11,6 +11,7 @@ const getCategoryById = async (id) => {
     const result = {
       id: dbResult.id,
       name: dbResult.name,
+      image: dbResult.image,
     };
 
     return result;
@@ -29,6 +30,7 @@ const getAllCategories = async () => {
       results.push({
         id: category.id,
         name: category.name,
+        image: category.image,
       });
     });
 
@@ -48,6 +50,7 @@ const getAllCategoriesAndBanned = async () => {
       results.push({
         id: category.id,
         name: category.name,
+        image: category.image,
       });
     });
 
@@ -57,11 +60,13 @@ const getAllCategoriesAndBanned = async () => {
   }
 };
 
-const createCategory = async (name) => {
+const createCategory = async (name, image, image_id) => {
   try {
     const categoryCreated = await Category.create({
       name,
       id: uuidv4(),
+      image,
+      image_id,
     });
 
     return categoryCreated;

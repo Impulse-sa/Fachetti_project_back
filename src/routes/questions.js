@@ -45,7 +45,7 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { username, description, email } = req.body;
+  const { username, description, email,phone } = req.body;
 
   if (!username) return res.status(400).json("Falta el nombre del usuario!");
   if (!description)
@@ -56,7 +56,8 @@ router.post("/", async (req, res) => {
     const questionCreated = await questionController.createQuestion(
       username,
       description,
-      email
+      email,
+      phone
     );
 
     res.status(201).json(questionCreated);

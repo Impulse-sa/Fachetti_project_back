@@ -72,13 +72,14 @@ const getAllQuestionsNotAnswered = async () => {
   }
 };
 
-const createQuestion = async (username, email, description) => {
+const createQuestion = async (username, email, description,phone) => {
   try {
     const questionCreated = await Question.create({
       id: uuidv4(),
       username,
       email,
       description,
+      phone
     });
 
     return questionCreated;

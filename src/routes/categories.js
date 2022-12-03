@@ -43,9 +43,10 @@ router.post(
     tempFileDir: "./uploads",
   }),
   async (req, res) => {
-    const { name } = req.body;
+    const { name, image } = req.body;
 
-    if (!name) return res.status(400).json("Falta el nombre de la categoría!");
+    if (!name) return res.status(400).json("Falta el nombre de la categoría");
+    if (!image) return res.status(400).json("Falta la imagen de la categoría");
 
     try {
       const categoryExist = await Category.findOne({ where: { name } });
@@ -57,7 +58,8 @@ router.post(
         const categoryCreated = await categoryController.createCategory(
           name,
           result.secure_url,
-          result.public_id
+          result.public_id,
+          image
         );
         await fs.unlink(req.files.image.tempFilePath);
         res.status(201).json(categoryCreated);

@@ -15,7 +15,10 @@ const uploadImage = async (filePath) => {
   return await cloudinary.uploader.upload(filePath, {
     folder: "fachetti",
     transformation: {
-      quality: 50,
+      width: 300,
+      height: 400,
+      gravity: "auto",
+      crop: "fill"
     },
   });
 };

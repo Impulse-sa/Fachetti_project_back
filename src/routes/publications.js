@@ -57,43 +57,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// router.post(
-//   "/",
-//   fileUpload({
-//     useTempFiles: true,
-//     tempFileDir: "./uploads",
-//   }),
-//   async (req, res) => {
-//     const { title, description } = req.body;
-
-//     if (!title)
-//       return res.status(400).json("Falta el título de la publicación!");
-//     if (!description)
-//       return res.status(400).json("Falta la descripción de la publicación!");
-
-//     try {
-//       if (req.files?.image) {
-//         const result = await uploadImage(req.files.image.tempFilePath);
-//         const publicationCreated =
-//           await publicationController.createPublication(
-//             title,
-//             description,
-//             result.secure_url,
-//             result.public_id
-//           );
-//         await fs.unlink(req.files.image.tempFilePath);
-//         res.status(201).json(publicationCreated);
-//       } else {
-//         const publicationCreated =
-//           await publicationController.createPublication(title, description);
-
-//         res.status(201).json(publicationCreated);
-//       }
-//     } catch (error) {
-//       res.status(400).json(error.message);
-//     }
-//   }
-// );
 router.post("/", async (req, res) => {
     const { title, description, image } = req.body;
 

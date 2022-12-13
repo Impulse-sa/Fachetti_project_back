@@ -29,10 +29,6 @@ module.exports = (sequelize) => {
         allowNull: false,
         defaultValue: null,
       },
-      image_id: {
-        type: DataTypes.STRING,
-        defaultValue: null,
-      },
     },
     {
       timestamps: true,

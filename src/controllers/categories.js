@@ -60,13 +60,12 @@ const getAllCategoriesAndBanned = async () => {
   }
 };
 
-const createCategory = async (name, image, image_id) => {
+const createCategory = async (name, image) => {
   try {
     const categoryCreated = await Category.create({
       name,
       id: uuidv4(),
       image,
-      image_id,
     });
 
     return categoryCreated;

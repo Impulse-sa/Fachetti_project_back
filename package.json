@@ -19,6 +19,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@railway/cli": "^2.0.13",
     "nodemon": "^2.0.20"
   },
   "name": "fachetti_project_back",

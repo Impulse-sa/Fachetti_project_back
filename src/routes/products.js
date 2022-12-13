@@ -86,44 +86,74 @@ router.get("/", async (req, res) => {
   }
 });
 
+// router.post(
+//   "/",
+//   fileUpload({
+//     useTempFiles: true,
+//     tempFileDir: "./uploads",
+//   }),
+//   async (req, res) => {
+//     const { name, description, categoryId } = req.body;
+
+//     if (!name) return res.status(400).json("Falta el nombre del producto!");
+//     if (!categoryId)
+//       return res.status(400).json("Falta la categoría del producto!");
+//     if (!description)
+//       return res.status(400).json("Falta la descripcion del producto!");
+
+//     try {
+//       const productExists = await Product.findOne({ where: { name } });
+//       if (productExists) return res.status(400).json("El producto ya existe!");
+
+//       if (req.files?.image) {
+//         const result = await uploadImage(req.files.image.tempFilePath);
+//         const productCreated = await productController.createProduct(
+//           name,
+//           description,
+//           categoryId,
+//           result.secure_url,
+//           result.public_id
+//         );
+//         await fs.unlink(req.files.image.tempFilePath);
+//         res.status(201).json(productCreated);
+//       } else {
+//         const productCreated = await productController.createProduct(
+//           name,
+//           categoryId,
+//           description
+//         );
+//         res.status(201).json(productCreated);
+//       }
+//     } catch (error) {
+//       res.status(400).json(error.message);
+//     }
+//   }
+// );
 router.post(
-  "/",
-  fileUpload({
-    useTempFiles: true,
-    tempFileDir: "./uploads",
-  }),
-  async (req, res) => {
-    const { name, description, categoryId } = req.body;
+  "/", async (req, res) => {
+    const { name, description, categoryId, image } = req.body;
 
     if (!name) return res.status(400).json("Falta el nombre del producto!");
     if (!categoryId)
       return res.status(400).json("Falta la categoría del producto!");
     if (!description)
       return res.status(400).json("Falta la descripcion del producto!");
+    if (!image)
+    return res.status(400).json("Falta la image del producto!");
 
     try {
       const productExists = await Product.findOne({ where: { name } });
       if (productExists) return res.status(400).json("El producto ya existe!");
 
-      if (req.files?.image) {
-        const result = await uploadImage(req.files.image.tempFilePath);
-        const productCreated = await productController.createProduct(
-          name,
-          description,
-          categoryId,
-          result.secure_url,
-          result.public_id
-        );
-        await fs.unlink(req.files.image.tempFilePath);
-        res.status(201).json(productCreated);
-      } else {
-        const productCreated = await productController.createProduct(
-          name,
-          categoryId,
-          description
-        );
-        res.status(201).json(productCreated);
-      }
+      const productCreated = await productController.createProduct(
+        name,
+        categoryId,
+        description,
+        image
+      );
+
+      res.status(201).json(productCreated);
+      
     } catch (error) {
       res.status(400).json(error.message);
     }

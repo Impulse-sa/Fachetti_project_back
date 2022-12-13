@@ -48,12 +48,20 @@ router.post(
           result.public_id
         );
         await fs.unlink(req.files.image.tempFilePath);
-        res.status(201).json(imageCreated?imageCreated:'no se pudo crear la imagen');
       }
+      res.status(201).json(imageCreated?imageCreated:'no se pudo crear la imagen');
     } catch (error) {
       res.status(400).json(error.message);
     }
   }
 );
+
+router.delete('/', async (req,res)=>{
+  try {
+    
+  } catch (error) {
+    
+  }
+})
 
 module.exports = router;

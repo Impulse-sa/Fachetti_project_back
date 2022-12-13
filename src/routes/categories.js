@@ -36,34 +36,55 @@ router.get("/banned", async (req, res) => {
   }
 });
 
-router.post(
-  "/",
-  fileUpload({
-    useTempFiles: true,
-    tempFileDir: "./uploads",
-  }),
-  async (req, res) => {
+// router.post(
+//   "/",
+//   fileUpload({
+//     useTempFiles: true,
+//     tempFileDir: "./uploads",
+//   }),
+//   async (req, res) => {
+//     const { name, image } = req.body;
+
+//     if (!name) return res.status(400).json("Falta el nombre de la categoría");
+//     // if (!image) return res.status(400).json("Falta la imagen de la categoría");
+
+//     try {
+//       const categoryExist = await Category.findOne({ where: { name } });
+//       if (categoryExist) return res.status(400).json("La categoría ya existe!");
+
+//       if (req.files?.image) {
+//         const result = await uploadImage(req.files.image.tempFilePath);
+
+//         const categoryCreated = await categoryController.createCategory(
+//           name,
+//           result.secure_url,
+//           result.public_id,
+//           // image
+//         );
+//         await fs.unlink(req.files.image.tempFilePath);
+//         res.status(201).json(categoryCreated);
+//       }
+//     } catch (error) {
+//       console.log(error.message)
+//       res.status(400).json(error.message);
+//     }
+//   }
+// );
+router.post("/", async (req, res) => {
     const { name, image } = req.body;
 
     if (!name) return res.status(400).json("Falta el nombre de la categoría");
-    // if (!image) return res.status(400).json("Falta la imagen de la categoría");
+    if (!image) return res.status(400).json("Falta la imagen de la categoría");
 
     try {
       const categoryExist = await Category.findOne({ where: { name } });
-      if (categoryExist) return res.status(400).json("La categoría ya existe!");
+      if (categoryExist) return res.status(400).json("La categoría ya existe");
 
-      if (req.files?.image) {
-        const result = await uploadImage(req.files.image.tempFilePath);
-
-        const categoryCreated = await categoryController.createCategory(
-          name,
-          result.secure_url,
-          result.public_id,
-          // image
-        );
-        await fs.unlink(req.files.image.tempFilePath);
-        res.status(201).json(categoryCreated);
-      }
+      const categoryCreated = await categoryController.createCategory(
+        name,
+        image
+      );
+      res.status(201).json(categoryCreated);
     } catch (error) {
       console.log(error.message)
       res.status(400).json(error.message);

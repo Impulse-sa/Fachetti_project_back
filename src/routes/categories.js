@@ -35,7 +35,7 @@ router.get("/banned", async (req, res) => {
     res.status(400).json(error.message);
   }
 });
-git 
+
 router.post("/", async (req, res) => {
     const { name, image } = req.body;
 

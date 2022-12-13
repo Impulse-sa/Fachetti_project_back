@@ -137,8 +137,7 @@ const createProduct = async (
   name,
   description,
   categoryId,
-  image,
-  image_id
+  image
 ) => {
   try {
     const productCreated = await Product.create({
@@ -146,8 +145,7 @@ const createProduct = async (
       categoryId,
       description,
       id: uuidv4(),
-      image,
-      image_id,
+      image
     });
 
     return productCreated;

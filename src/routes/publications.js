@@ -58,20 +58,20 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-    const { title, description, image } = req.body;
+    const { title, image } = req.body;
 
     if (!title)
       return res.status(400).json("Falta el título de la publicación");
-    if (!description)
-      return res.status(400).json("Falta la descripción de la publicación");
-      if (!image)
-      return res.status(400).json("Falta la descripción de la image");
+    // if (!description)
+    //   return res.status(400).json("Falta la descripción de la publicación");
+    if (!image)
+    return res.status(400).json("Falta la imagen de la publicación");
 
     try {
       
         const publicationCreated = await publicationController.createPublication(
             title,
-            description,
+            // description,
             image
           );
         res.status(201).json(publicationCreated);

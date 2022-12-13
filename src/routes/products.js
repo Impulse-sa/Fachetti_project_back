@@ -147,9 +147,9 @@ router.post(
 
       const productCreated = await productController.createProduct(
         name,
-        categoryId,
         description,
-        image
+        image,
+        categoryId,
       );
 
       res.status(201).json(productCreated);

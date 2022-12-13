@@ -136,16 +136,16 @@ const getAllProductsAndBanned = async () => {
 const createProduct = async (
   name,
   description,
+  image,
   categoryId,
-  image
 ) => {
   try {
     const productCreated = await Product.create({
-      name,
-      categoryId,
-      description,
       id: uuidv4(),
-      image
+      name,
+      description,
+      image,
+      categoryId,
     });
 
     return productCreated;

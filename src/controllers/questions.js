@@ -12,6 +12,7 @@ const getAllQuestions = async () => {
         username: q.username,
         email: q.email,
         description: q.description,
+        isRead: q.isRead,
         isAnswered: q.isAnswered,
       });
     });
@@ -37,6 +38,7 @@ const getAllQuestionsAnswered = async () => {
         username: q.username,
         email: q.email,
         description: q.description,
+        isRead: q.isRead,
         isAnswered: q.isAnswered,
       });
     });
@@ -62,6 +64,7 @@ const getAllQuestionsNotAnswered = async () => {
         username: q.username,
         email: q.email,
         description: q.description,
+        isRead: q.isRead,
         isAnswered: q.isAnswered,
       });
     });
@@ -98,6 +101,7 @@ const getQuestionById = async (id) => {
       id: question.id,
       description: question.description,
       username: question.username,
+      isRead: question.isRead,
       isAnswered: question.isAnswered,
       email: question.email,
     };

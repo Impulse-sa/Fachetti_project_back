@@ -11,11 +11,11 @@ module.exports = (sequelize) => {
         allowNull: false,
         primaryKey: true,
       },
-      username: {
+      name: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      description: {
+      message: {
         type: DataTypes.TEXT,
         allowNull: false,
       },
@@ -27,6 +27,10 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: true,
         defaultValue: null,
+      },
+      isRead: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
       isAnswered: {
         type: DataTypes.BOOLEAN,

@@ -45,17 +45,17 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { username, description, email,phone } = req.body;
+  const { name, message, email, phone } = req.body;
 
-  if (!username) return res.status(400).json("Falta el nombre del usuario!");
-  if (!description)
+  if (!name) return res.status(400).json("Falta el nombre del usuario!");
+  if (!message)
     return res.status(400).json("Falta el contenido de la consulta!");
   if (!email) return res.status(400).json("Falta el email del usuario!");
 
   try {
     const questionCreated = await questionController.createQuestion(
-      username,
-      description,
+      name,
+      message,
       email,
       phone
     );

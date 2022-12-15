@@ -9,6 +9,7 @@ const fileUpload = require("express-fileupload");
 const { uploadImage } = require("../utils/cloudinary");
 
 router.get("/", async (req, res) => {
+  console.log('Chequeo de logs de peticiones a categories')
   try {
     const categories = await categoryController.getAllCategories();
 

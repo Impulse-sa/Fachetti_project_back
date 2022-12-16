@@ -69,10 +69,10 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get('/', (req,res)=>{
+router.get('/', async (req,res)=>{
 
   try {
-    const users = userController.getAllUsers()
+    const users = await userController.getAllUsers()
     console.log(users)
     if (!users.length) {
       return res.status(200).json("No se encontraron usuarios");

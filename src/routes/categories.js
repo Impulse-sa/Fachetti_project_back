@@ -62,9 +62,10 @@ router.put("/:id", auth, async (req, res) => {
 
   try {
     const result = await categoryController.setBanned(id, banned);
-    return res.status(200).json(result,req.user);
+    console.log('result: ', result)
+    return res.status(200).json(result);
   } catch (error) {
-    res.status(400).json(error.message);
+    res.status(400).json(error);
   }
 });
 

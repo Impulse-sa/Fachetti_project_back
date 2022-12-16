@@ -73,6 +73,7 @@ router.get('/', (req,res)=>{
 
   try {
     const users = userController.getAllUsers()
+    console.log(users)
     if (!users.length) {
       return res.status(200).json("No se encontraron usuarios");
     }

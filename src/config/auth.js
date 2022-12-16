@@ -8,8 +8,8 @@ module.exports = async (req, res, next) => {
     const token = await req.headers.authorization;
 
     const decodedToken = await jwt.verify(token, RANDOM_TOKEN);
-
-    req.user = decodedToken;
+    console.log(decodedToken)
+    res.user = decodedToken;
     next();
   } catch (error) {
     res.status(403).json("Peticion no valida, faltan credenciales!");

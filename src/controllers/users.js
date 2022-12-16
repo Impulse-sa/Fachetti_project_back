@@ -21,15 +21,19 @@ const getUserById = async (id) => {
 };
 
 const getAllUsers = async () => {
+  const result = [];
+
   try {
-    const dbResult = await User.findAll();
+    const users = await User.findAll();
 
-    if (!dbResult) return null;
+    if (!users) return null;
 
-    const result = {
-      id: dbResult.id,
-      email: dbResult.email,
-    };
+    users.forEach( (u) =>{
+      result.push({
+        id: u.id,
+        email: u.email,
+      });
+    })
 
     return result;
   } catch (error) {

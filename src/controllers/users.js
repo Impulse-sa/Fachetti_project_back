@@ -25,6 +25,7 @@ const getAllUsers = async () => {
 
   try {
     const users = await User.findAll();
+    console.log('users: ',users)
 
     if (!users) return null;
 
@@ -35,6 +36,7 @@ const getAllUsers = async () => {
       });
     })
 
+    console.log('result: ', result)
     return result;
   } catch (error) {
     throw new Error(error.message);

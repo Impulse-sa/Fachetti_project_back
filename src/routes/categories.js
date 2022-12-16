@@ -4,9 +4,7 @@ const router = Router();
 const { Category } = require("../db");
 const categoryController = require("../controllers/categories");
 
-const fs = require("fs-extra");
-const fileUpload = require("express-fileupload");
-const { uploadImage } = require("../utils/cloudinary");
+const auth = require('../config/auth')
 
 router.get("/", async (req, res) => {
   console.log('Chequeo de logs de peticiones a categories')
@@ -58,13 +56,13 @@ router.post("/", async (req, res) => {
   }
 );
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   const { id } = req.params;
   const { banned } = req.query;
 
   try {
     const result = await categoryController.setBanned(id, banned);
-    return res.status(200).json(result);
+    return res.status(200).json(result,req.user);
   } catch (error) {
     res.status(400).json(error.message);
   }

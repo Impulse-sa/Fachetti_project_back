@@ -8,6 +8,7 @@ const userController = require("../controllers/users");
 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const { RANDOM_TOKEN } = process.env;
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -29,7 +30,7 @@ router.post("/login", async (req, res) => {
         userId: userById.id,
         email: userById.email,
       },
-      "RANDOM_TOKEN",
+      RANDOM_TOKEN,
       { expiresIn: "24h" }
     );
 

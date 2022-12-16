@@ -20,6 +20,23 @@ const getUserById = async (id) => {
   }
 };
 
+const getAllUsers = async () => {
+  try {
+    const dbResult = await User.findAll();
+
+    if (!dbResult) return null;
+
+    const result = {
+      id: dbResult.id,
+      email: dbResult.email,
+    };
+
+    return result;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 const createUser = async (email, password) => {
   try {
     const userCreated = await User.create({
@@ -36,4 +53,5 @@ const createUser = async (email, password) => {
 module.exports = {
   createUser,
   getUserById,
+  getAllUsers
 };

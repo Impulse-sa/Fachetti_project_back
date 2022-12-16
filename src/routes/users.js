@@ -69,4 +69,14 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get('/', (req,res)=>{
+
+  try {
+    const users = userController.getAllUsers()
+    res.status(200).json(users)
+  } catch (error) {
+    res.status(400).send(error.message)
+  }
+})
+
 module.exports = router;

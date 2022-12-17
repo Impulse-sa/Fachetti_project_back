@@ -1,4 +1,4 @@
-import throttle from 'express-rate-limit';
+const throttle = require('express-rate-limit') ;
 
 
 const meta = {

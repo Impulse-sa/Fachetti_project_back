@@ -15,4 +15,4 @@ const ThrottleExpressMiddleware = throttle({
     message: meta
 });
 
-export default ThrottleExpressMiddleware;
+module.exports= {ThrottleExpressMiddleware};

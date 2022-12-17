@@ -4,7 +4,8 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const routes = require("./routes/index.js");
 const cors = require("cors");
-const { default: ThrottleExpressMiddleware } = require("./utils/Throttle.js");
+const { ThrottleExpressMiddleware } = require("./utils/Throttle.js");
+
 
 require("./db.js");
 

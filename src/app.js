@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const routes = require("./routes/index.js");
 const cors = require("cors");
+const { default: ThrottleExpressMiddleware } = require("./utils/Throttle.js");
 
 require("./db.js");
 
@@ -26,7 +27,7 @@ server.use(cors());
   res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
   next();
 }); */
-
+server.use('/',ThrottleExpressMiddleware)
 server.use("/", routes);
 
 // Error catching endware.

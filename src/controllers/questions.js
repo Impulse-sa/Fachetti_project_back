@@ -4,9 +4,12 @@ const { v4: uuidv4 } = require("uuid");
 const getAllQuestions = async () => {
   const results = [];
   try {
-    const questions = await Question.findAll();
+    const {count, rows} = await Question.findAndCountAll({
+      offset: 0,
+      limit: 10
+    });
 
-    questions.forEach((q) => {
+    rows.forEach((q) => {
       results.push({
         id: q.id,
         username: q.username,
@@ -17,7 +20,7 @@ const getAllQuestions = async () => {
       });
     });
 
-    return questions;
+    return [results, count];
   } catch (error) {
     throw new Error(error.message);
   }
@@ -26,13 +29,15 @@ const getAllQuestions = async () => {
 const getAllQuestionsAnswered = async () => {
   const results = [];
   try {
-    const questions = await Question.findAll({
+    const {count, rows} = await Question.findAndCountAll({
       where: {
         isAnswered: true,
       },
+      offset: 0,
+      limit: 10
     });
 
-    questions.forEach((q) => {
+    rows.forEach((q) => {
       results.push({
         id: q.id,
         username: q.username,
@@ -43,7 +48,7 @@ const getAllQuestionsAnswered = async () => {
       });
     });
 
-    return questions;
+    return [results, count];
   } catch (error) {
     throw new Error(error.message);
   }
@@ -52,13 +57,15 @@ const getAllQuestionsAnswered = async () => {
 const getAllQuestionsNotAnswered = async () => {
   const results = [];
   try {
-    const questions = await Question.findAll({
+    const {count, rows} = await Question.findAndCountAll({
       where: {
         isAnswered: false,
       },
+      offset: 0,
+      limit: 10
     });
 
-    questions.forEach((q) => {
+    rows.forEach((q) => {
       results.push({
         id: q.id,
         username: q.username,
@@ -69,7 +76,7 @@ const getAllQuestionsNotAnswered = async () => {
       });
     });
 
-    return questions;
+    return [results, count];
   } catch (error) {
     throw new Error(error.message);
   }

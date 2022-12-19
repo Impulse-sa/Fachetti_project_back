@@ -1,7 +1,6 @@
 const { Router } = require("express");
 const router = Router();
 
-const { Question } = require("../db");
 const questionController = require("../controllers/questions");
 
 router.get("/:id", async (req, res) => {
@@ -19,23 +18,23 @@ router.get("/:id", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const { answered } = req.query;
+  const { answered, page, sizePage } = req.query;
   try {
     if (answered === "true") {
-      const questions = await questionController.getAllQuestionsAnswered();
+      const questions = await questionController.getAllQuestionsAnswered(page, sizePage);
       if (!questions.length) return res.status(200).json("No hay consultas!");
 
       return res.status(200).json(questions);
     }
 
     if (answered === "false") {
-      const questions = await questionController.getAllQuestionsNotAnswered();
+      const questions = await questionController.getAllQuestionsNotAnswered(page, sizePage);
       if (!questions.length) return res.status(200).json("No hay consultas!");
 
       return res.status(200).json(questions);
     }
 
-    const questions = await questionController.getAllQuestions();
+    const questions = await questionController.getAllQuestions(page, sizePage);
     if (!questions.length) return res.status(200).json("No hay consultas!");
 
     res.status(200).json(questions);
@@ -68,11 +67,19 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const { answered } = req.query;
+  const { answered, isReaded } = req.query;
+
 
   try {
-    const result = await questionController.setAnswered(id, answered);
-    res.status(200).json(result);
+    if (isReaded) {
+      const result = await questionController.setReaded(id, isReaded);
+      res.status(200).json(result);
+    }
+    if (answered) {
+      const result = await questionController.setAnswered(id, answered);
+      res.status(200).json(result);
+    }
+    res.status(206).json('Falta indicar parámetro')
   } catch (error) {
     res.status(400).json(error.message);
   }

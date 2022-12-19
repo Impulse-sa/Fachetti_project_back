@@ -1,12 +1,14 @@
 const { Question } = require("../db");
 const { v4: uuidv4 } = require("uuid");
+const { paginate } = require("../utils/paginate");
+const { convertDate } = require("../utils/convertDate");
 
-const getAllQuestions = async () => {
+const getAllQuestions = async (page=0,pageSize=10) => {
   const results = [];
   try {
     const {count, rows} = await Question.findAndCountAll({
-      offset: 0,
-      limit: 10
+      order: [["createdAt", "DESC"]],
+      ...paginate(page,pageSize)
     });
 
     rows.forEach((q) => {
@@ -17,6 +19,7 @@ const getAllQuestions = async () => {
         message: q.message,
         isRead: q.isRead,
         isAnswered: q.isAnswered,
+        date: convertDate(q.createdAt)
       });
     });
 
@@ -26,15 +29,15 @@ const getAllQuestions = async () => {
   }
 };
 
-const getAllQuestionsAnswered = async () => {
+const getAllQuestionsAnswered = async (page=0,pageSize=10) => {
   const results = [];
   try {
     const {count, rows} = await Question.findAndCountAll({
       where: {
         isAnswered: true,
       },
-      offset: 0,
-      limit: 10
+      order: [["createdAt", "DESC"]],
+      ...paginate(page,pageSize)
     });
 
     rows.forEach((q) => {
@@ -45,6 +48,7 @@ const getAllQuestionsAnswered = async () => {
         message: q.message,
         isRead: q.isRead,
         isAnswered: q.isAnswered,
+        date: convertDate(q.createdAt)
       });
     });
 
@@ -54,15 +58,15 @@ const getAllQuestionsAnswered = async () => {
   }
 };
 
-const getAllQuestionsNotAnswered = async () => {
+const getAllQuestionsNotAnswered = async (page=0,pageSize=10) => {
   const results = [];
   try {
     const {count, rows} = await Question.findAndCountAll({
       where: {
         isAnswered: false,
       },
-      offset: 0,
-      limit: 10
+      order: [["createdAt", "DESC"]],
+      ...paginate(page,pageSize)
     });
 
     rows.forEach((q) => {
@@ -73,6 +77,7 @@ const getAllQuestionsNotAnswered = async () => {
         message: q.message,
         isRead: q.isRead,
         isAnswered: q.isAnswered,
+        date: convertDate(q.createdAt)
       });
     });
 
@@ -140,6 +145,27 @@ const setAnswered = async (id, answered) => {
   }
 };
 
+const setReaded = async (id, readed) => {
+  try {
+    const questionUpdated = await Question.update(
+      {
+        isRead: readed,
+      },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    if (questionUpdated) {
+      const question = await getQuestionById(id);
+      return question;
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 module.exports = {
   createQuestion,
   getAllQuestions,
@@ -147,4 +173,5 @@ module.exports = {
   getAllQuestionsNotAnswered,
   setAnswered,
   getQuestionById,
+  setReaded
 };

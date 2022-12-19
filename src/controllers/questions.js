@@ -12,9 +12,9 @@ const getAllQuestions = async () => {
     rows.forEach((q) => {
       results.push({
         id: q.id,
-        username: q.username,
+        name: q.name,
         email: q.email,
-        description: q.description,
+        message: q.message,
         isRead: q.isRead,
         isAnswered: q.isAnswered,
       });
@@ -40,9 +40,9 @@ const getAllQuestionsAnswered = async () => {
     rows.forEach((q) => {
       results.push({
         id: q.id,
-        username: q.username,
+        name: q.name,
         email: q.email,
-        description: q.description,
+        message: q.message,
         isRead: q.isRead,
         isAnswered: q.isAnswered,
       });
@@ -68,9 +68,9 @@ const getAllQuestionsNotAnswered = async () => {
     rows.forEach((q) => {
       results.push({
         id: q.id,
-        username: q.username,
+        name: q.name,
         email: q.email,
-        description: q.description,
+        message: q.message,
         isRead: q.isRead,
         isAnswered: q.isAnswered,
       });
@@ -82,13 +82,13 @@ const getAllQuestionsNotAnswered = async () => {
   }
 };
 
-const createQuestion = async (username, email, description,phone) => {
+const createQuestion = async (name, message, email,phone) => {
   try {
     const questionCreated = await Question.create({
       id: uuidv4(),
-      username,
+      name,
+      message,
       email,
-      description,
       phone
     });
 
@@ -106,8 +106,8 @@ const getQuestionById = async (id) => {
 
     const result = {
       id: question.id,
-      description: question.description,
-      username: question.username,
+      message: question.message,
+      name: question.name,
       isRead: question.isRead,
       isAnswered: question.isAnswered,
       email: question.email,

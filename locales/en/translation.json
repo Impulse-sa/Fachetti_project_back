@@ -1,0 +1,11 @@
+{
+    
+        "user_already_exist":"Exist an user registered with that email",
+        "invalid_email":"Must be a valid email",
+        "category":"Has to be a email",
+    
+    "categories":
+    {
+
+    }
+}

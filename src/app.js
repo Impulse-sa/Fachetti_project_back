@@ -5,9 +5,9 @@ const morgan = require("morgan");
 const routes = require("./routes/index.js");
 const cors = require("cors");
 const { ThrottleExpressMiddleware } = require("./utils/Throttle.js");
-
-
-require("./db.js");
+const i18next = require('i18next')
+const backend = require('i18next-fs-backend')
+const middleware = require('i18next-http-middleware')
 
 const server = express();
 
@@ -28,7 +28,15 @@ server.use(cors());
   res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
   next();
 }); */
+
+i18next.use(backend).use(middleware.LanguageDetector).init({
+  fallbackLng: 'en',
+  backend: {
+    loadPath: './locales/{{lng}}/translation.json'
+  }
+})
 server.use('/',ThrottleExpressMiddleware)
+server.use(middleware.handle(i18next))
 server.use("/", routes);
 
 // Error catching endware.

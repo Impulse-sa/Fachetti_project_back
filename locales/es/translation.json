@@ -1,0 +1,10 @@
+{
+   
+        "user_already_exist":"Ya existe un usuario con ese email",
+        "category":"Tiene que tener formato de email",
+   
+    "categories":
+    {
+
+    }
+}

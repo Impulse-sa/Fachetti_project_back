@@ -48,7 +48,8 @@ const getAllQuestionsAnswered = async (page=0,pageSize=10) => {
         message: q.message,
         isRead: q.isRead,
         isAnswered: q.isAnswered,
-        date: convertDate(q.createdAt)
+        date: convertDate(q.createdAt),
+        phone: q.phone
       });
     });
 
@@ -77,6 +78,7 @@ const getAllQuestionsNotAnswered = async (page=0,pageSize=10) => {
         message: q.message,
         isRead: q.isRead,
         isAnswered: q.isAnswered,
+        phone: q.phone,
         date: convertDate(q.createdAt)
       });
     });
@@ -116,6 +118,8 @@ const getQuestionById = async (id) => {
       isRead: question.isRead,
       isAnswered: question.isAnswered,
       email: question.email,
+      phone: question.phone,
+      date: convertDate(q.createdAt)
     };
 
     return result;

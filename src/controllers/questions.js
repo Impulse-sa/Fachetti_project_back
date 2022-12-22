@@ -19,7 +19,8 @@ const getAllQuestions = async (page=0,pageSize=10) => {
         message: q.message,
         isRead: q.isRead,
         isAnswered: q.isAnswered,
-        date: convertDate(q.createdAt)
+        date: convertDate(q.createdAt),
+        phone:q.phone
       });
     });
 

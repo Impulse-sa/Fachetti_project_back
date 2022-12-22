@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require("uuid");
 
 const { Product, Category } = require("../db");
 const productController = require("../controllers/products");
+const {validateProductCreate, validateProductUpdate} = require('../validator/products')
 
 const { uploadImage } = require("../utils/cloudinary");
 
@@ -129,8 +130,7 @@ router.get("/", async (req, res) => {
 //     }
 //   }
 // );
-router.post(
-  "/", async (req, res) => {
+router.post( "/", validateProductCreate, async (req, res) => {
     const { name, description, categoryId, image } = req.body;
 
     if (!name) return res.status(400).json("Falta el nombre del producto!");
@@ -160,7 +160,7 @@ router.post(
   }
 );
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", validateProductUpdate, async (req, res) => {
   const { id } = req.params;
   const { banned } = req.query;
 

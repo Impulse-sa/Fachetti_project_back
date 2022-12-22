@@ -6,6 +6,7 @@ const publicationController = require("../controllers/publications");
 const { uploadImage } = require("../utils/cloudinary");
 const fs = require("fs-extra");
 const fileUpload = require("express-fileupload");
+const {validatePublicationCreate} = require('../validator/publications')
 
 router.get("/banned", async (req, res) => {
   try {
@@ -57,7 +58,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", validatePublicationCreate,async (req, res) => {
     const { title, image } = req.body;
 
     if (!title)

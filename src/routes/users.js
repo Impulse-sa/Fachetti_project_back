@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require("uuid");
 
 const { User } = require("../db");
 const userController = require("../controllers/users");
+const {validateUserCreate} = require('../validator/users')
 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
@@ -40,11 +41,11 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", validateUserCreate, async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email) return res.status(400).json("Falta email del usuario!");
-  if (!password) return res.status(400).json("Falta password del usuario!");
+  // if (!email) return res.status(400).json("Falta email del usuario!");
+  // if (!password) return res.status(400).json("Falta password del usuario!");
 
   try {
     const emailExist = await User.findOne({
@@ -56,9 +57,10 @@ router.post("/", async (req, res) => {
     if (emailExist) {
       return res
         .status(400)
-        .json(
-          "Existe un usuario con esa dirección de email. Prueba con una nueva!"
-        );
+        .json(req.t('user_already_exist'))
+        // .json(
+        //   "Existe un usuario con esa dirección de email. Prueba con una nueva!"
+        // );
     }
 
     const userCreated = await userController.createUser(email, password);

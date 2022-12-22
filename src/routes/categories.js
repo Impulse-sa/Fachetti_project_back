@@ -3,6 +3,7 @@ const router = Router();
 
 const { Category } = require("../db");
 const categoryController = require("../controllers/categories");
+const {validateCategoryCreate} = require('../validator/categories')
 
 const auth = require('../config/auth')
 
@@ -34,7 +35,7 @@ router.get("/banned", async (req, res) => {
     res.status(400).json(error.message);
   }
 });
-router.post("/", async (req, res) => {
+router.post("/", validateCategoryCreate, async (req, res) => {
     const { name, image } = req.body;
 
     if (!name) return res.status(400).json("Falta el nombre de la categoría");

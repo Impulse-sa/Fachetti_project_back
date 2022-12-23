@@ -120,7 +120,7 @@ const getQuestionById = async (id) => {
       isAnswered: question.isAnswered,
       email: question.email,
       phone: question.phone,
-      date: convertDate(q.createdAt)
+      date: convertDate(question.createdAt)
     };
 
     return result;
@@ -146,6 +146,7 @@ const setAnswered = async (id, answered) => {
       return question;
     }
   } catch (error) {
+    console.log(error)
     throw new Error(error.message);
   }
 };

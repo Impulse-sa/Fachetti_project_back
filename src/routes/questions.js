@@ -67,21 +67,25 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const { answered, isReaded } = req.query;
+  const { answered, readed } = req.query;
 
 
   try {
-    if (isReaded) {
-      const result = await questionController.setReaded(id, isReaded);
+    if (readed) {
+      const result = await questionController.setReaded(id, readed);
       res.status(200).json(result);
+      return
     }
     if (answered) {
       const result = await questionController.setAnswered(id, answered);
       res.status(200).json(result);
+      return
     }
     res.status(206).json('Falta indicar parámetro')
   } catch (error) {
+    console.log(error)
     res.status(400).json(error.message);
+    return
   }
 });
 

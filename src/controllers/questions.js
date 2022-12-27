@@ -30,12 +30,13 @@ const getAllQuestions = async (page=0,pageSize=10) => {
   }
 };
 
-const getAllQuestionsAnswered = async (page=0,pageSize=10) => {
+const getAllQuestionsbyQuery = async (isRead=false, isAnswered=false, page=0,pageSize=10) => {
   const results = [];
   try {
     const {count, rows} = await Question.findAndCountAll({
       where: {
-        isAnswered: true,
+        isRead,
+        isAnswered
       },
       order: [["createdAt", "DESC"]],
       ...paginate(page,pageSize)
@@ -60,12 +61,12 @@ const getAllQuestionsAnswered = async (page=0,pageSize=10) => {
   }
 };
 
-const getAllQuestionsNotAnswered = async (page=0,pageSize=10) => {
+const getAllQuestionsReaded = async ( isRead, page=0,pageSize=10) => {
   const results = [];
   try {
     const {count, rows} = await Question.findAndCountAll({
       where: {
-        isAnswered: false,
+        isRead
       },
       order: [["createdAt", "DESC"]],
       ...paginate(page,pageSize)
@@ -79,8 +80,38 @@ const getAllQuestionsNotAnswered = async (page=0,pageSize=10) => {
         message: q.message,
         isRead: q.isRead,
         isAnswered: q.isAnswered,
-        phone: q.phone,
-        date: convertDate(q.createdAt)
+        date: convertDate(q.createdAt),
+        phone: q.phone
+      });
+    });
+
+    return [results, count];
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+ 
+const getAllQuestionsAnswered = async ( isAnswered, page=0,pageSize=10) => {
+  const results = [];
+  try {
+    const {count, rows} = await Question.findAndCountAll({
+      where: {
+        isAnswered
+      },
+      order: [["createdAt", "DESC"]],
+      ...paginate(page,pageSize)
+    });
+
+    rows.forEach((q) => {
+      results.push({
+        id: q.id,
+        name: q.name,
+        email: q.email,
+        message: q.message,
+        isRead: q.isRead,
+        isAnswered: q.isAnswered,
+        date: convertDate(q.createdAt),
+        phone: q.phone
       });
     });
 
@@ -131,6 +162,9 @@ const getQuestionById = async (id) => {
 
 const setAnswered = async (id, answered) => {
   try {
+    const question = await Question.findByPk(id);
+    if (question.isRead === false) throw new Error('No se puede responder una consulta que aún no fue vista.')
+
     const questionUpdated = await Question.update(
       {
         isAnswered: answered,
@@ -175,8 +209,9 @@ const setReaded = async (id, readed) => {
 module.exports = {
   createQuestion,
   getAllQuestions,
+  getAllQuestionsbyQuery,
+  getAllQuestionsReaded,
   getAllQuestionsAnswered,
-  getAllQuestionsNotAnswered,
   setAnswered,
   getQuestionById,
   setReaded

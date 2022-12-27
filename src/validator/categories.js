@@ -5,10 +5,10 @@ const validateCategoryCreate = [
     check('name')
         .exists()
         .not()
-        .isEmpty()
-        .isEmail().withMessage((req)=>{
-            return req.t('category')
-        }),
+        .isEmpty(),
+        // .isEmail().withMessage((req)=>{
+        //     return req.t('category')
+        // }),
     check('image')
         .exists()
         .not()

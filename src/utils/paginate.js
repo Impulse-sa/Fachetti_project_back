@@ -3,8 +3,8 @@ const paginate = ( page, pageSize ) => {
     const limit = pageSize;
   
     return {
-      offset,
       limit,
+      offset,
     };
   };
 

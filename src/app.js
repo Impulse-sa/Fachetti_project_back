@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const routes = require("./routes/index.js");
 const cors = require("cors");
+const path = require('path')
 const { ThrottleExpressMiddleware } = require("./utils/Throttle.js");
 const i18next = require('i18next')
 const backend = require('i18next-fs-backend')
@@ -28,6 +29,7 @@ server.use(cors());
   res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
   next();
 }); */
+server.use(express.static(path.join(__dirname, 'public')))
 
 i18next.use(backend).use(middleware.LanguageDetector).init({
   fallbackLng: 'en',

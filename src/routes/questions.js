@@ -2,6 +2,7 @@ const { Router } = require("express");
 const router = Router();
 
 const questionController = require("../controllers/questions");
+const { sendMail } = require("../utils/emailer");
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
@@ -18,26 +19,34 @@ router.get("/:id", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const { answered, page, sizePage } = req.query;
+  const { readed, answered, page, sizePage } = req.query;
   try {
-    if (answered === "true") {
-      const questions = await questionController.getAllQuestionsAnswered(page, sizePage);
+    if (answered && !readed) {
+      const questions = await questionController.getAllQuestionsAnswered( answered, page, sizePage);
       if (!questions.length) return res.status(200).json("No hay consultas!");
 
       return res.status(200).json(questions);
     }
 
-    if (answered === "false") {
-      const questions = await questionController.getAllQuestionsNotAnswered(page, sizePage);
+    if (!answered && readed) {
+      const questions = await questionController.getAllQuestionsReaded( readed, page, sizePage);
+      if (!questions.length) return res.status(200).json("No hay consultas!");
+
+      return res.status(200).json(questions);
+    }
+    if (readed && answered) {
+      const questions = await questionController.getAllQuestionsbyQuery(readed, answered, page, sizePage);
       if (!questions.length) return res.status(200).json("No hay consultas!");
 
       return res.status(200).json(questions);
     }
 
     const questions = await questionController.getAllQuestions(page, sizePage);
+
     if (!questions.length) return res.status(200).json("No hay consultas!");
 
     res.status(200).json(questions);
+
   } catch (error) {
     res.status(400).json(error.message);
   }
@@ -59,6 +68,8 @@ router.post("/", async (req, res) => {
       phone
     );
 
+    if (questionCreated) sendMail(name, email)
+    console.log('ya pase por linea de envio de email')
     res.status(201).json(questionCreated);
   } catch (error) {
     res.status(400).json(error.message);

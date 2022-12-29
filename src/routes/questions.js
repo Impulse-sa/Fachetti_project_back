@@ -23,27 +23,27 @@ router.get("/", async (req, res) => {
   try {
     if (answered && !readed) {
       const questions = await questionController.getAllQuestionsAnswered( answered, page, sizePage);
-      if (!questions.length) return res.status(200).json("No hay consultas!");
+      if (!questions.data.length) return res.status(200).json("No hay consultas!");
 
       return res.status(200).json(questions);
     }
 
     if (!answered && readed) {
       const questions = await questionController.getAllQuestionsReaded( readed, page, sizePage);
-      if (!questions.length) return res.status(200).json("No hay consultas!");
+      if (!questions.data.length) return res.status(200).json("No hay consultas!");
 
       return res.status(200).json(questions);
     }
     if (readed && answered) {
       const questions = await questionController.getAllQuestionsbyQuery(readed, answered, page, sizePage);
-      if (!questions.length) return res.status(200).json("No hay consultas!");
+      if (!questions.data.length) return res.status(200).json("No hay consultas!");
 
       return res.status(200).json(questions);
     }
 
     const questions = await questionController.getAllQuestions(page, sizePage);
 
-    if (!questions.length) return res.status(200).json("No hay consultas!");
+    if (!questions.data.length) return res.status(200).json("No hay consultas!");
 
     res.status(200).json(questions);
 

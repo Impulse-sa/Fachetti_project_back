@@ -23,8 +23,16 @@ const getAllQuestions = async (page=0,pageSize=10) => {
         phone:q.phone
       });
     });
+  
+    api = {
+      data: results,
+      page: +page,
+      totalPages: Math.ceil(count/(+pageSize)),
+      pageSize: +pageSize,
+      totalData: count
+    };
 
-    return [results, +page, +pageSize, count];
+    return api;
   } catch (error) {
     throw new Error(error.message);
   }
@@ -55,7 +63,15 @@ const getAllQuestionsbyQuery = async (isRead=false, isAnswered=false, page=0, pa
       });
     });
 
-    return [results, +page, +pageSize, count];
+    api = {
+      data: results,
+      page: +page,
+      totalPages: Math.ceil(count/(+pageSize)),
+      pageSize: +pageSize,
+      totalData: count
+    };
+
+    return api;
   } catch (error) {
     throw new Error(error.message);
   }
@@ -85,7 +101,15 @@ const getAllQuestionsReaded = async ( isRead, page=0,pageSize=10) => {
       });
     });
 
-    return [results, +page, +pageSize, count];
+    api = {
+      data: results,
+      page: +page,
+      totalPages: Math.ceil(count/(+pageSize)),
+      pageSize: +pageSize,
+      totalData: count
+    };
+
+    return api;
   } catch (error) {
     throw new Error(error.message);
   }
@@ -115,7 +139,15 @@ const getAllQuestionsAnswered = async ( isAnswered, page=0,pageSize=10) => {
       });
     });
 
-    return [results, +page, +pageSize, count];
+    api = {
+      data: results,
+      page: +page,
+      totalPages: Math.ceil(count/(+pageSize)),
+      pageSize: +pageSize,
+      totalData: count
+    };
+
+    return api;
   } catch (error) {
     throw new Error(error.message);
   }

@@ -24,13 +24,13 @@ const getAllQuestions = async (page=0,pageSize=10) => {
       });
     });
 
-    return [results, count];
+    return [results, +page, +pageSize, count];
   } catch (error) {
     throw new Error(error.message);
   }
 };
 
-const getAllQuestionsbyQuery = async (isRead=false, isAnswered=false, page=0,pageSize=10) => {
+const getAllQuestionsbyQuery = async (isRead=false, isAnswered=false, page=0, pageSize=10) => {
   const results = [];
   try {
     const {count, rows} = await Question.findAndCountAll({
@@ -55,7 +55,7 @@ const getAllQuestionsbyQuery = async (isRead=false, isAnswered=false, page=0,pag
       });
     });
 
-    return [results, count];
+    return [results, +page, +pageSize, count];
   } catch (error) {
     throw new Error(error.message);
   }
@@ -85,7 +85,7 @@ const getAllQuestionsReaded = async ( isRead, page=0,pageSize=10) => {
       });
     });
 
-    return [results, count];
+    return [results, +page, +pageSize, count];
   } catch (error) {
     throw new Error(error.message);
   }
@@ -115,7 +115,7 @@ const getAllQuestionsAnswered = async ( isAnswered, page=0,pageSize=10) => {
       });
     });
 
-    return [results, count];
+    return [results, +page, +pageSize, count];
   } catch (error) {
     throw new Error(error.message);
   }

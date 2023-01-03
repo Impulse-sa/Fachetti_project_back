@@ -103,7 +103,18 @@ router.put('/:id', async (req,res)=>{
     if (!user) {
       return res.status(200).json("User not found");
     }
-    res.status(200).json(user)
+    const token = jwt.sign(
+      {
+        userId: user.id,
+        email: user.email,
+        fullName: user.fullName,
+        profileImage: user.profileImage,
+      },
+      RANDOM_TOKEN,
+      { expiresIn: "24h" }
+    );
+
+    res.status(200).json(token)
   } catch (error) {
     res.status(400).send(error.message)
   }

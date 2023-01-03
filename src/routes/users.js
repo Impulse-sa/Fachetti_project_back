@@ -3,6 +3,7 @@ const router = Router();
 
 const { User } = require("../db");
 const { v4: uuidv4 } = require("uuid");
+const bcrypt = require("bcryptjs");
 
 const userController = require("../controllers/users");
 const {validateUserCreate, validateUserLogin} = require('../validator/users')
@@ -14,17 +15,16 @@ router.post("/login", validateUserLogin, async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    console.log('llegué')
     const userEmail = await User.findOne({ where: { email } });
-    console.log(userEmail)
-    const userById = await userController.getUserById(userEmail.id);
-
+    const validatePassword = await bcrypt.compare(password, userEmail.password)
+    if (!validatePassword) throw new Error('Invalid Password')
+  
     const token = jwt.sign(
       {
-        userId: userById.id,
-        email: userById.email,
-        fullName: userById.fullName,
-        profileImage: userById.profileImage,
+        userId: userEmail.id,
+        email: userEmail.email,
+        fullName: userEmail.fullName,
+        profileImage: userEmail.profileImage,
       },
       RANDOM_TOKEN,
       { expiresIn: "24h" }
@@ -32,6 +32,7 @@ router.post("/login", validateUserLogin, async (req, res) => {
 
     res.status(200).json(token);
   } catch (error) {
+    console.log('se genera el error')
     res.status(400).json(error.message);
   }
 });
@@ -81,7 +82,7 @@ router.get('/:id', async (req,res)=>{
   const {id} = req.params
 
   try {
-    const user = await userController.getUserById(id)
+    const user = await userController.getuserEmail(id)
     console.log(user)
     if (!user) {
       return res.status(200).json("User not found");

@@ -1,7 +1,6 @@
 const {check} = require('express-validator')
 const { validateResult } = require('../utils/validateHelper')
 const { User } = require("../db");
-const bcrypt = require("bcryptjs");
 
 const validateUserCreate = [
     check('email')
@@ -22,7 +21,7 @@ const validateUserCreate = [
         .custom(value => {
             const regExpassword = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$/
 
-            if (!regExpassword.test(value)) {
+            if (regExpassword.test(value)) {
               throw new Error('Password is not valid. Must have 1 Uper case, 3 lower case, 2 numbers, and 1 special character. Min length 8 char')
             }
             // Indicates the success of this synchronous custom validator
@@ -92,8 +91,7 @@ const validateUserLogin = [
       .withMessage('Must have a password')
       .bail()
       .custom(value => {
-          const validatePassword = bcrypt.compare(value, userEmail.password)
-          if (!validatePassword) throw new Error('Invalid Password')
+          
           // Indicates the success of this synchronous custom validator
           return true;
         })

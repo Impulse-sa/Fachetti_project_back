@@ -94,7 +94,7 @@ router.get('/:id', async (req,res)=>{
 
 router.put('/:id', async (req,res)=>{
   const {id} = req.params
-  const {data} = req.body
+  const data = req.body
 
   try {
     const user = await userController.updateUser(id, data)

@@ -22,7 +22,7 @@ const validateUserCreate = [
         .custom(value => {
             const regExpassword = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$/
 
-            if (regExpassword.test(value)) {
+            if (!regExpassword.test(value)) {
               throw new Error('Password is not valid. Must have 1 Uper case, 3 lower case, 2 numbers, and 1 special character. Min length 8 char')
             }
             // Indicates the success of this synchronous custom validator
@@ -33,7 +33,7 @@ const validateUserCreate = [
         .exists()
         .not()
         .isEmpty()
-        .withMessage('Must have a name')
+        .withMessage('Must have a fullName')
         .bail()
         .toLowerCase()
         .bail()
@@ -64,7 +64,10 @@ const validateUserCreate = [
         validateResult(req,res,next)
     }
 ]
-
+const findUser = async (email) => {
+  var userEmail = await User.findOne({ where: { email } });
+  return userEmail
+}
 const validateUserLogin = [
   check('email')
       .exists()
@@ -77,7 +80,8 @@ const validateUserLogin = [
       .bail()
       .custom( async (value) => {
         console.log('entre al custom validate', value)
-        const userEmail = await User.findOne({ where: { email: value } });
+        // const userEmail = await User.findOne({ where: { email: value } });
+        const userEmail = await findUser(value)
         console.log(userEmail)
         if (!userEmail) throw new Error("Email no encontrado!");
       }),

@@ -75,6 +75,8 @@ const updateUser = async (id, data) => {
         }
       }
     )
+    const user = await User.findByPk(id)
+    return user;
   } catch (error) {
     throw new Error(error.message);
   }

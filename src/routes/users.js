@@ -1,35 +1,30 @@
 const { Router } = require("express");
 const router = Router();
 
+const { User } = require("../db");
 const { v4: uuidv4 } = require("uuid");
 
-const { User } = require("../db");
 const userController = require("../controllers/users");
-const {validateUserCreate} = require('../validator/users')
+const {validateUserCreate, validateUserLogin} = require('../validator/users')
 
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
 const { RANDOM_TOKEN } = process.env;
 
-router.post("/login", async (req, res) => {
+router.post("/login", validateUserLogin, async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    if (!email) return res.status(400).json("Falta email del usuario!");
-    if (!password) return res.status(400).json("Falta password del usuario!");
-
+    console.log('llegué')
     const userEmail = await User.findOne({ where: { email } });
-    if (!userEmail) throw new Error("Email no encontrado!");
-
-    const passwordMatch = await bcrypt.compare(password, userEmail.password);
-    if (!passwordMatch) throw new Error("Password incorrecto!");
-
+    console.log(userEmail)
     const userById = await userController.getUserById(userEmail.id);
 
     const token = jwt.sign(
       {
         userId: userById.id,
         email: userById.email,
+        fullName: userById.fullName,
+        profileImage: userById.profileImage,
       },
       RANDOM_TOKEN,
       { expiresIn: "24h" }
@@ -42,10 +37,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/", validateUserCreate, async (req, res) => {
-  const { email, password } = req.body;
-
-  // if (!email) return res.status(400).json("Falta email del usuario!");
-  // if (!password) return res.status(400).json("Falta password del usuario!");
+  const { email, password, fullName, profileImage } = req.body;
 
   try {
     const emailExist = await User.findOne({
@@ -63,7 +55,7 @@ router.post("/", validateUserCreate, async (req, res) => {
         // );
     }
 
-    const userCreated = await userController.createUser(email, password);
+    const userCreated = await userController.createUser(email, password, fullName, profileImage);
 
     res.status(201).json(userCreated);
   } catch (error) {
@@ -80,6 +72,37 @@ router.get('/', async (req,res)=>{
       return res.status(200).json("No se encontraron usuarios");
     }
     res.status(200).json(users)
+  } catch (error) {
+    res.status(400).send(error.message)
+  }
+})
+
+router.get('/:id', async (req,res)=>{
+  const {id} = req.params
+
+  try {
+    const user = await userController.getUserById(id)
+    console.log(user)
+    if (!user) {
+      return res.status(200).json("User not found");
+    }
+    res.status(200).json(user)
+  } catch (error) {
+    res.status(400).send(error.message)
+  }
+})
+
+router.put('/:id', async (req,res)=>{
+  const {id} = req.params
+  const {data} = req.body
+
+  try {
+    const user = await userController.updateUser(id, data)
+    console.log(user)
+    if (!user) {
+      return res.status(200).json("User not found");
+    }
+    res.status(200).json(user)
   } catch (error) {
     res.status(400).send(error.message)
   }

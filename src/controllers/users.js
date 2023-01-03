@@ -12,6 +12,8 @@ const getUserById = async (id) => {
     const result = {
       id: dbResult.id,
       email: dbResult.email,
+      fullName: dbResult.fullName,
+      profileImage: dbResult.profileImage,
     };
 
     return result;
@@ -33,6 +35,8 @@ const getAllUsers = async () => {
       result.push({
         id: u.id,
         email: u.email,
+        fullName: u.fullName,
+        profileImage: u.profileImage,
       });
     })
 
@@ -43,12 +47,14 @@ const getAllUsers = async () => {
   }
 };
 
-const createUser = async (email, password) => {
+const createUser = async (email, password, fullName, profileImage) => {
   try {
     const userCreated = await User.create({
+      id: uuidv4(),
       email,
       password: await bcrypt.hash(password, 10),
-      id: uuidv4(),
+      fullName,
+      profileImage      
     });
     return userCreated;
   } catch (error) {
@@ -56,8 +62,26 @@ const createUser = async (email, password) => {
   }
 };
 
+const updateUser = async (id, data) => {
+  try {
+    const updatedUser = await User.update(
+      {
+        fullName: data.fullName,
+        profileImage: data.profileImage
+      },
+      {
+        where: {
+        id
+        }
+      }
+    )
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
 module.exports = {
   createUser,
   getUserById,
-  getAllUsers
+  getAllUsers,
+  updateUser
 };

@@ -6,9 +6,10 @@ const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcryptjs");
 
 const userController = require("../controllers/users");
-const {validateUserCreate, validateUserLogin} = require('../validator/users')
+const {validateUserCreate, validateUserLogin, validateUserUpdate, validateUserBanned} = require('../validator/users')
 
 const jwt = require("jsonwebtoken");
+const auth = require('../config/auth')
 const { RANDOM_TOKEN } = process.env;
 
 router.post("/login", validateUserLogin, async (req, res) => {
@@ -64,7 +65,7 @@ router.post("/", validateUserCreate, async (req, res) => {
   }
 });
 
-router.get('/', async (req,res)=>{
+router.get('/', auth, async (req,res)=>{
 
   try {
     const users = await userController.getAllUsers()
@@ -93,7 +94,7 @@ router.get('/:id', async (req,res)=>{
   }
 })
 
-router.put('/:id', async (req,res)=>{
+router.put('/:id', auth, validateUserUpdate, async (req,res)=>{
   const {id} = req.params
   const data = req.body
 
@@ -115,6 +116,19 @@ router.put('/:id', async (req,res)=>{
     );
 
     res.status(200).json(token)
+  } catch (error) {
+    res.status(400).send(error.message)
+  }
+})
+
+router.put('/:id', auth, validateUserBanned, async (req, res)=>{
+  const {id} = req.params;
+  const {isBanned} = req.query;
+
+  try {
+    const userBanned = await userController.bannedUser(id, isBanned)
+    res.status(201).json(userBanned)
+
   } catch (error) {
     res.status(400).send(error.message)
   }

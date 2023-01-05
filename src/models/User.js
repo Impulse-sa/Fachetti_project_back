@@ -28,6 +28,10 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
         defaultValue: 'https://res.cloudinary.com/dnitjpfm5/image/upload/v1672528895/fachetti/generic/150-1503945_transparent-user-png-default-user-image-png-png_d5kq3a.png'
+      },
+      isBanned: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
       }
     },
     {

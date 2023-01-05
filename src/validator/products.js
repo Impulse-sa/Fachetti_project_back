@@ -1,40 +1,80 @@
-const {check} = require('express-validator')
-const { validateResult } = require('../utils/validateHelper')
+const {check, query, param, body} = require('express-validator')
+const { validateResult, validateName, validateImage } = require('../utils/validateHelper')
 
 const validateProductCreate = [
     check('name')
         .exists()
         .not()
-        .isEmpty(),
+        .isEmpty()
+        .isString()
+        .isLength({min: 3, max: 30}).withMessage('Min characters: 3, Max characters: 30')
+        .custom( value => validateName(value))
+        .bail(),
     check('image')
         .exists()
         .not()
-        .isEmpty(),
+        .isEmpty()
+        .custom(value => validateImage(value))
+        .bail(),
     check('description')
         .exists()
         .not()
-        .isEmpty(),
+        .isEmpty()
+        .isString()
+        .bail(),
     check('categoryId')
         .exists()
         .not()
-        .isEmpty(),
+        .isEmpty()
+        .isUUID(),
     (req,res,next)=>{
         validateResult(req,res,next)
     }
-
 ]
 
 const validateProductUpdate = [
-    check('id')
+    param('id')
         .exists()
         .not()
-        .isEmpty(),
-    check('isBanned')
+        .isEmpty()
+        .isUUID()
+        .bail(),
+    body('name')
         .exists()
+        .not()
+        .isEmpty()
+        .custom( value => validateName(value))
+        .bail(),
+    body('image')
+        .exists()
+        .not()
+        .isEmpty()
+        .custom( value => validateImage(value))
+        .bail(),
+    (req,res,next)=>{
+        validateResult(req,res,next)
+    }
+]
+
+const validateProductBanned = [
+    param('id')
+        .exists()
+        .not()
+        .isEmpty()
+        .isUUID(),
+    query('isBanned')
+        .exists()
+        .not()
+        .isEmpty()
         .isBoolean(),
+    (req,res,next)=>{
+        validateResult(req,res,next)
+    }
 ]
 
 module.exports = {
     validateProductCreate,
-    validateProductUpdate
+    validateProductUpdate,
+    validateProductBanned
+
 }

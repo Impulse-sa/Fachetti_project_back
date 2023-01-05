@@ -1,22 +1,84 @@
-const {check} = require('express-validator')
-const { validateResult } = require('../utils/validateHelper')
+const {check, query, param, body} = require('express-validator')
+const { validateResult, validateName, validateImage } = require('../utils/validateHelper')
 
 const validatePublicationCreate = [
     check('title')
         .exists()
         .not()
-        .isEmpty(),
+        .isEmpty()
+        .isString()
+        .custom( value => validateName(value, 'title'))
+        .bail(),
     check('isImportant')
-        .exists()
+        .optional()
         .isBoolean(),
     check('image')
         .exists()
         .not()
-        .isEmpty(),
+        .isEmpty()
+        .custom(value => validateImage(value))
+        .bail(),
     (req,res,next)=>{
         validateResult(req,res,next)
     }
-
 ]
 
-module.exports = {validatePublicationCreate}
+const validatePublicationUpdate = [
+    param('id')
+        .exists()
+        .not()
+        .isEmpty()
+        .isUUID(),
+    body('title')
+        .exists()
+        .not()
+        .isEmpty()
+        .custom( value => validateName(value, 'title'))
+        .bail(),
+    body('isImportant')
+        .optional()
+        .isBoolean(),
+    body('image')
+        .exists()
+        .not()
+        .isEmpty()
+        .custom(value => validateImage(value))
+        .bail(),
+    body('descriptiion')
+        .exists()
+        .not()
+        .isEmpty()
+        .isLength({min:30,max:300})
+        .custom( value => validateName(value, 'description'))
+        .bail(),
+    body('isBanned')
+        .exists()
+        .not()
+        .isEmpty()
+        .isBoolean(),
+    (req,res,next)=>{
+        validateResult(req,res,next)
+    }
+]
+const validatePublicationBanned = [
+    param('id')
+        .exists()
+        .not()
+        .isEmpty()
+        .isUUID(),
+    query('isBanned')
+        .exists()
+        .not()
+        .isEmpty()
+        .isBoolean(),
+    (req,res,next)=>{
+        validateResult(req,res,next)
+    }
+]
+
+
+module.exports = {
+    validatePublicationCreate,
+    validatePublicationBanned,
+    validatePublicationUpdate
+}

@@ -1,6 +1,7 @@
-const {check} = require('express-validator')
-const { validateResult } = require('../utils/validateHelper')
+const {check, param, query} = require('express-validator')
+const { validateResult, validateImage, validateName, validatePassword } = require('../utils/validateHelper')
 const { User } = require("../db");
+const { v4 } = require('uuid');
 
 const validateUserCreate = [
     check('email')
@@ -18,15 +19,7 @@ const validateUserCreate = [
         .isEmpty()
         .withMessage('Must have a password')
         .bail()
-        .custom(value => {
-            const regExpassword = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$/
-
-            if (regExpassword.test(value)) {
-              throw new Error('Password is not valid. Must have 1 Uper case, 3 lower case, 2 numbers, and 1 special character. Min length 8 char')
-            }
-            // Indicates the success of this synchronous custom validator
-            return true;
-          })
+        .custom(value => validatePassword(value))
         .bail(),
     check('fullName')
         .exists()
@@ -34,39 +27,23 @@ const validateUserCreate = [
         .isEmpty()
         .withMessage('Must have a fullName')
         .bail()
-        .toLowerCase()
-        .bail()
-        .custom(value => {
-            const regExName = /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s+[a-zA-ZÀ-ÿ\u00f1\u00d1]+)*$/
-
-            if (!regExName.test(value)) {
-              throw new Error('Fullname is not valid');
-            }
-            // Indicates the success of this synchronous custom validator
-            return true;
-          })
+        .custom(value => validateName(value,'fullName'))
         .bail(),
       check('profileImage')
-        .custom(value => {
-            if (value) {
-              const regExName = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gmi
-
-              if (!regExName.test(value)) {
-                throw new Error('Is not a valid image url');
-              } 
-            }
-            // Indicates the success of this synchronous custom validator
-            return true;
-          })
+        .optional()
+        .custom( value => validateImage(value))
         .bail(),
     (req,res,next)=>{
         validateResult(req,res,next)
     }
 ]
+
+
 const findUser = async (email) => {
   var userEmail = await User.findOne({ where: { email } });
   return userEmail
 }
+
 const validateUserLogin = [
   check('email')
       .exists()
@@ -78,10 +55,7 @@ const validateUserLogin = [
       .withMessage('Must be a valid email')
       .bail()
       .custom( async (value) => {
-        console.log('entre al custom validate', value)
-        // const userEmail = await User.findOne({ where: { email: value } });
         const userEmail = await findUser(value)
-        console.log(userEmail)
         if (!userEmail) throw new Error("Email no encontrado!");
       }),
   check('password')
@@ -89,18 +63,56 @@ const validateUserLogin = [
       .not()
       .isEmpty()
       .withMessage('Must have a password')
-      .bail()
-      .custom(value => {
-          
-          // Indicates the success of this synchronous custom validator
-          return true;
-        })
       .bail(),
-      (req,res,next)=>{
-        validateResult(req,res,next)
+  (req,res,next)=>{
+    validateResult(req,res,next)
     }
 ]
-module.exports = {validateUserCreate, validateUserLogin}
+
+const validateUserUpdate = [
+  param('id')
+      .exists()
+      .not()
+      .isEmpty()
+      .isUUID(v4),
+  check('fullName')
+      .exists()
+      .not()
+      .isEmpty()
+      .withMessage('Must have a fullName')
+      .bail()
+      .custom(value => validateName(value,'fullName'))
+      .bail(),
+  check('profileImage')
+      .optional()
+      .custom( value => validateImage(value))
+      .bail(),
+  (req,res,next)=>{
+    validateResult(req,res,next)
+  }
+]
+
+const validateUserBanned = [
+  param('id')
+      .exists()
+      .not()
+      .isEmpty()
+      .isUUID(v4),
+  query('isBanned')
+      .exists()
+      .not()
+      .isEmpty()
+      .isBoolean(),
+  (req,res,next)=>{
+    validateResult(req,res,next)
+  }
+]
+module.exports = {
+  validateUserCreate, 
+  validateUserLogin,
+  validateUserUpdate,
+  validateUserBanned
+}
 
 // RegEx Explanation
 // ^                         Start anchor

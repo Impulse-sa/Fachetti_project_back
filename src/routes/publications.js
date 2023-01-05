@@ -1,14 +1,12 @@
 const { Router } = require("express");
 const router = Router();
 
-const { Publication } = require("../db");
 const publicationController = require("../controllers/publications");
-const { uploadImage } = require("../utils/cloudinary");
-const fs = require("fs-extra");
-const fileUpload = require("express-fileupload");
-const {validatePublicationCreate} = require('../validator/publications')
+const {validatePublicationCreate, validatePublicationUpdate} = require('../validator/publications')
 
-router.get("/banned", async (req, res) => {
+const auth = require('../config/auth')
+
+router.get("/banned", auth, async (req, res) => {
   try {
     const publications =
       await publicationController.getAllPublicationsAndBanned();
@@ -58,21 +56,13 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", validatePublicationCreate,async (req, res) => {
+router.post("/", auth, validatePublicationCreate, async (req, res) => {
     const { title, image } = req.body;
-
-    if (!title)
-      return res.status(400).json("Falta el título de la publicación");
-    // if (!description)
-    //   return res.status(400).json("Falta la descripción de la publicación");
-    if (!image)
-    return res.status(400).json("Falta la imagen de la publicación");
 
     try {
       
         const publicationCreated = await publicationController.createPublication(
             title,
-            // description,
             image
           );
         res.status(201).json(publicationCreated);
@@ -83,7 +73,7 @@ router.post("/", validatePublicationCreate,async (req, res) => {
   }
 );
 
-router.put("/edit/:id", async (req, res) => {
+router.put("/edit/:id", auth, validatePublicationUpdate, async (req, res) => {
   const { id } = req.params;
   const data = req.body;
 
@@ -98,7 +88,7 @@ router.put("/edit/:id", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   const { id } = req.params;
   const { banned, important } = req.query;
 

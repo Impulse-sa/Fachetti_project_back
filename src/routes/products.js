@@ -5,14 +5,8 @@ const { v4: uuidv4 } = require("uuid");
 
 const { Product, Category } = require("../db");
 const productController = require("../controllers/products");
-const {validateProductCreate, validateProductUpdate} = require('../validator/products')
+const {validateProductCreate, validateProductUpdate, validateProductBanned} = require('../validator/products')
 
-const { uploadImage } = require("../utils/cloudinary");
-
-const fs = require("fs-extra");
-const fileUpload = require("express-fileupload");
-
-const jwt = require("../config/auth");
 const auth = require("../config/auth");
 
 router.get("/banned", async (req, res) => {
@@ -43,7 +37,7 @@ router.get("/categories/:category", async (req, res) => {
   }
 });
 
-router.get("/categories/:category/banned", async (req, res) => {
+router.get("/categories/:category/banned", auth, async (req, res) => {
   const { category } = req.params;
   try {
     const products = await productController.getAllProductsByCategoryAndBanned(
@@ -87,6 +81,58 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.post( "/", auth, validateProductCreate, async (req, res) => {
+    const { name, description, categoryId, image } = req.body;
+
+    try {
+      const productExists = await Product.findOne({ where: { name } });
+      if (productExists) return res.status(400).json("El producto ya existe!");
+
+      const productCreated = await productController.createProduct(
+        name,
+        description,
+        image,
+        categoryId,
+      );
+
+      res.status(201).json(productCreated);
+      
+    } catch (error) {
+      res.status(400).json(error.message);
+    }
+  }
+);
+
+router.put("/:id", auth, validateProductBanned, async (req, res) => {
+  const { id } = req.params;
+  const { banned } = req.query;
+
+  try {
+    const result = await productController.setBanned(id, banned);
+    return res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+});
+
+router.put("/edit/:id", auth, validateProductUpdate, async (req, res) => {
+  const { id } = req.params;
+  const data = req.body;
+
+  try {
+    const productUpdated = await productController.updateProduct(id, data);
+    if (productUpdated) res.status(200).json(productUpdated);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+});
+
+module.exports = router;
+
+// const { uploadImage } = require("../utils/cloudinary");
+
+// const fs = require("fs-extra");
+// const fileUpload = require("express-fileupload");
 // router.post(
 //   "/",
 //   fileUpload({
@@ -130,58 +176,3 @@ router.get("/", async (req, res) => {
 //     }
 //   }
 // );
-router.post( "/", validateProductCreate, async (req, res) => {
-    const { name, description, categoryId, image } = req.body;
-
-    if (!name) return res.status(400).json("Falta el nombre del producto!");
-    if (!categoryId)
-      return res.status(400).json("Falta la categoría del producto!");
-    if (!description)
-      return res.status(400).json("Falta la descripcion del producto!");
-    if (!image)
-    return res.status(400).json("Falta la image del producto!");
-
-    try {
-      const productExists = await Product.findOne({ where: { name } });
-      if (productExists) return res.status(400).json("El producto ya existe!");
-
-      const productCreated = await productController.createProduct(
-        name,
-        description,
-        image,
-        categoryId,
-      );
-
-      res.status(201).json(productCreated);
-      
-    } catch (error) {
-      res.status(400).json(error.message);
-    }
-  }
-);
-
-router.put("/:id", validateProductUpdate, async (req, res) => {
-  const { id } = req.params;
-  const { banned } = req.query;
-
-  try {
-    const result = await productController.setBanned(id, banned);
-    return res.status(200).json(result);
-  } catch (error) {
-    res.status(400).json(error.message);
-  }
-});
-
-router.put("/edit/:id", async (req, res) => {
-  const { id } = req.params;
-  const data = req.body;
-
-  try {
-    const productUpdated = await productController.updateProduct(id, data);
-    if (productUpdated) res.status(200).json(productUpdated);
-  } catch (error) {
-    res.status(400).json(error.message);
-  }
-});
-
-module.exports = router;

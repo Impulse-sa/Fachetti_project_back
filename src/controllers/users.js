@@ -81,9 +81,29 @@ const updateUser = async (id, data) => {
     throw new Error(error.message);
   }
 }
+
+const bannedUser = async (id, isBanned) => {
+  try {
+    const userBanned = await User.update(
+      {
+        isBanned
+      },
+      {
+        where: {
+        id
+        }
+      }
+    )
+    const user = await User.findByPk(id)
+    return user;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
 module.exports = {
   createUser,
   getUserById,
   getAllUsers,
-  updateUser
+  updateUser,
+  bannedUser
 };

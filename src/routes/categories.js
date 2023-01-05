@@ -3,7 +3,7 @@ const router = Router();
 
 const { Category } = require("../db");
 const categoryController = require("../controllers/categories");
-const {validateCategoryCreate} = require('../validator/categories')
+const {validateCategoryCreate, validateCategoryUpdate, validateCategoryBanned} = require('../validator/categories')
 
 const auth = require('../config/auth')
 
@@ -35,7 +35,7 @@ router.get("/banned", async (req, res) => {
     res.status(400).json(error.message);
   }
 });
-router.post("/", validateCategoryCreate, async (req, res) => {
+router.post("/", auth, validateCategoryCreate, async (req, res) => {
     const { name, image } = req.body;
 
     if (!name) return res.status(400).json("Falta el nombre de la categoría");
@@ -57,16 +57,27 @@ router.post("/", validateCategoryCreate, async (req, res) => {
   }
 );
 
-router.put("/:id", auth, async (req, res) => {
+router.put("/:id", auth, validateCategoryUpdate, async (req, res) => {
+  const { id } = req.params;
+  const { name, image } = req.body;
+
+  try {
+    const result = await categoryController.updateCategory(id, banned);
+    return res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+});
+
+router.put("/:id", auth, validateCategoryBanned, async (req, res) => {
   const { id } = req.params;
   const { banned } = req.query;
 
   try {
     const result = await categoryController.setBanned(id, banned);
-    console.log('result: ', result)
     return res.status(200).json(result);
   } catch (error) {
-    res.status(400).json(error);
+    res.status(400).json(error.message);
   }
 });
 

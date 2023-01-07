@@ -3,15 +3,17 @@ const { RANDOM_TOKEN } = process.env;
 
 module.exports = async (req, res, next) => {
   try {
-    console.log('req.headers: ', req.headers)
     const token = await req.headers.authorization.split(" ")[1];
-    // const token = await req.headers.authorization;
-    
     const decodedToken = await jwt.verify(token, RANDOM_TOKEN);
-    console.log('decodedToken: ', decodedToken)
-    res.user = decodedToken;
-    next();
+
+    if (decodedToken.userId) {
+      res.user = decodedToken;
+      next();
+      
+  } else {
+    res.status(409).json('Peticion no valida, faltan credenciales')
+  }
   } catch (error) {
-    res.status(403).json("Peticion no valida, faltan credenciales!");
+    res.status(403).json('Peticion no valida, faltan credenciales');
   }
 };

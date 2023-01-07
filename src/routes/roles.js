@@ -3,9 +3,10 @@ const router = Router();
 const { Role } = require("../db");
 
 
-const roleControllers = require('../controllers/roles')
+const roleControllers = require('../controllers/roles');
+const authRole = require("../config/authRole");
 
-router.post('/', async (req,res)=>{
+router.post('/', authRole(['globalAdmin']), async (req,res)=>{
     const {name, description} = req.body
 
     try {
@@ -26,7 +27,7 @@ router.post('/', async (req,res)=>{
     }
 })
 
-router.get('/', async (req,res)=>{
+router.get('/', authRole(['globalAdmin']), async (req,res)=>{
     
     try {
         const roles = await roleControllers.getAllRoles()
@@ -36,7 +37,7 @@ router.get('/', async (req,res)=>{
     }
 })
 
-router.get('/:id', async (req,res)=>{
+router.get('/:id', authRole(['globalAdmin']), async (req,res)=>{
     const {id} = req.params
 
     try {
@@ -47,7 +48,7 @@ router.get('/:id', async (req,res)=>{
     }
 })
 
-router.put('/:id', async (req,res)=>{
+router.put('/:id', authRole(['globalAdmin']), async (req,res)=>{
     const {id} = req.params
     const {isBanned} = req.query
 
@@ -59,7 +60,7 @@ router.put('/:id', async (req,res)=>{
     }
 })
 
-router.put('/:id', async (req,res)=>{
+router.put('/:id', authRole(['globalAdmin']), async (req,res)=>{
     const {id} = req.params
     const {name, description} = req.body
     

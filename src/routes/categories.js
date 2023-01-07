@@ -8,7 +8,6 @@ const {validateCategoryCreate, validateCategoryUpdate, validateCategoryBanned} =
 const auth = require('../config/auth')
 
 router.get("/", async (req, res) => {
-  console.log('Chequeo de logs de peticiones a categories')
   try {
     const categories = await categoryController.getAllCategories();
 
@@ -22,7 +21,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/banned", async (req, res) => {
+router.get("/banned", auth, async (req, res) => {
   try {
     const categories = await categoryController.getAllCategoriesAndBanned();
 

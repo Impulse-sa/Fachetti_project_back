@@ -1,10 +1,11 @@
 const { Router } = require("express");
+const auth = require("../config/auth");
 const router = Router();
 
 const questionController = require("../controllers/questions");
 const { sendMail } = require("../utils/emailer");
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -18,7 +19,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   const { readed, answered, page, sizePage } = req.query;
   try {
     if (answered && !readed) {
@@ -76,7 +77,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   const { id } = req.params;
   const { answered, readed } = req.query;
 

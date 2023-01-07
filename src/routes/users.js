@@ -10,6 +10,7 @@ const {validateUserCreate, validateUserLogin, validateUserUpdate, validateUserBa
 
 const jwt = require("jsonwebtoken");
 const auth = require('../config/auth')
+const authRole = require('../config/authRole')
 const { RANDOM_TOKEN } = process.env;
 
 router.post("/login", validateUserLogin, async (req, res) => {
@@ -38,8 +39,8 @@ router.post("/login", validateUserLogin, async (req, res) => {
   }
 });
 
-router.post("/", validateUserCreate, async (req, res) => {
-  const { email, password, fullName, profileImage } = req.body;
+router.post("/", authRole(['globalAdmin']), validateUserCreate, async (req, res) => {
+  const { email, password, fullName, profileImage, roleId } = req.body;
 
   try {
     const emailExist = await User.findOne({
@@ -57,7 +58,7 @@ router.post("/", validateUserCreate, async (req, res) => {
         // );
     }
 
-    const userCreated = await userController.createUser(email, password, fullName, profileImage);
+    const userCreated = await userController.createUser(email, password, fullName, profileImage, roleId);
 
     res.status(201).json(userCreated);
   } catch (error) {
@@ -65,11 +66,10 @@ router.post("/", validateUserCreate, async (req, res) => {
   }
 });
 
-router.get('/', auth, async (req,res)=>{
+router.get('/', authRole(['globalAdmin']), async (req,res)=>{
 
   try {
     const users = await userController.getAllUsers()
-    console.log(users)
     if (!users.length) {
       return res.status(200).json("No se encontraron usuarios");
     }
@@ -79,7 +79,7 @@ router.get('/', auth, async (req,res)=>{
   }
 })
 
-router.get('/:id', async (req,res)=>{
+router.get('/:id', auth, async (req,res)=>{
   const {id} = req.params
 
   try {
@@ -121,7 +121,7 @@ router.put('/:id', auth, validateUserUpdate, async (req,res)=>{
   }
 })
 
-router.put('/:id', auth, validateUserBanned, async (req, res)=>{
+router.put('/:id', authRole(['globalAdmin']), validateUserBanned, async (req, res)=>{
   const {id} = req.params;
   const {isBanned} = req.query;
 

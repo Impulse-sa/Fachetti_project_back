@@ -9,7 +9,7 @@ const {validateProductCreate, validateProductUpdate, validateProductBanned} = re
 
 const auth = require("../config/auth");
 
-router.get("/banned", async (req, res) => {
+router.get("/banned", auth, async (req, res) => {
   try {
     const products = await productController.getAllProductsAndBanned();
     if (!products.length) {

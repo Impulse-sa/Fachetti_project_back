@@ -4,6 +4,7 @@ const router = Router();
 
 const questionController = require("../controllers/questions");
 const { sendMail } = require("../utils/emailer");
+const { validateQuestionCreate, validateQuestionUpdate } = require("../validator/questions");
 
 router.get("/:id", auth, async (req, res) => {
   const { id } = req.params;
@@ -53,13 +54,8 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", validateQuestionCreate, async (req, res) => {
   const { name, message, email, phone } = req.body;
-
-  if (!name) return res.status(400).json("Falta el nombre del usuario!");
-  if (!message)
-    return res.status(400).json("Falta el contenido de la consulta!");
-  if (!email) return res.status(400).json("Falta el email del usuario!");
 
   try {
     const questionCreated = await questionController.createQuestion(
@@ -70,17 +66,16 @@ router.post("/", async (req, res) => {
     );
 
     if (questionCreated) sendMail(name, email)
-    console.log('ya pase por linea de envio de email')
+    
     res.status(201).json(questionCreated);
   } catch (error) {
     res.status(400).json(error.message);
   }
 });
 
-router.put("/:id", auth, async (req, res) => {
+router.put("/:id", auth, validateQuestionUpdate, async (req, res) => {
   const { id } = req.params;
   const { answered, readed } = req.query;
-
 
   try {
     if (readed) {

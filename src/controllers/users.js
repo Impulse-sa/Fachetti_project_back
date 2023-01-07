@@ -47,14 +47,15 @@ const getAllUsers = async () => {
   }
 };
 
-const createUser = async (email, password, fullName, profileImage) => {
+const createUser = async (email, password, fullName, profileImage, roleId) => {
   try {
     const userCreated = await User.create({
       id: uuidv4(),
       email,
       password: await bcrypt.hash(password, 10),
       fullName,
-      profileImage      
+      profileImage,
+      roleId
     });
     return userCreated;
   } catch (error) {
@@ -75,8 +76,11 @@ const updateUser = async (id, data) => {
         }
       }
     )
+    if (!updatedUser) throw new Error('Usuario no encontrado')
+
     const user = await User.findByPk(id)
     return user;
+  
   } catch (error) {
     throw new Error(error.message);
   }
@@ -94,6 +98,29 @@ const bannedUser = async (id, isBanned) => {
         }
       }
     )
+    if (!userBanned) throw new Error('Usuario no encontrado')
+
+    const user = await User.findByPk(id)
+    return user;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+const updateRoleUser = async (id, roleId) => {
+  try {
+    const updatedUser = await User.update(
+      {
+        roleId
+      },
+      {
+        where: {
+        id
+        }
+      }
+    )
+    if (!updatedUser) throw new Error('Usuario no encontrado')
+    
     const user = await User.findByPk(id)
     return user;
   } catch (error) {
@@ -105,5 +132,7 @@ module.exports = {
   getUserById,
   getAllUsers,
   updateUser,
-  bannedUser
+  bannedUser,
+  updateRoleUser,
+
 };

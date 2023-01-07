@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 
+const roleRouter = require("./roles")
 const userRouter = require("./users");
 const categoryRouter = require("./categories");
 const productRouter = require("./products");
@@ -9,6 +10,7 @@ const questionRouter = require("./questions");
 const reviewRouter = require("./reviews");
 const imageRouter = require("./images");
 
+router.use("/roles", roleRouter);
 router.use("/users", userRouter);
 router.use("/categories", categoryRouter);
 router.use("/products", productRouter);

@@ -1,10 +1,10 @@
-const {check, param, query} = require('express-validator')
+const {body, param, query} = require('express-validator')
 const { validateResult, validateImage, validateName, validatePassword } = require('../utils/validateHelper')
 const { User } = require("../db");
 const { v4 } = require('uuid');
 
 const validateUserCreate = [
-    check('email')
+    body('email')
         .exists()
         .not()
         .isEmpty()
@@ -13,7 +13,7 @@ const validateUserCreate = [
         .isEmail()
         .withMessage('Must be a valid email')
         .bail(),
-    check('password')
+    body('password')
         .exists()
         .not()
         .isEmpty()
@@ -21,7 +21,7 @@ const validateUserCreate = [
         .bail()
         .custom(value => validatePassword(value))
         .bail(),
-    check('fullName')
+    body('fullName')
         .exists()
         .not()
         .isEmpty()
@@ -29,10 +29,15 @@ const validateUserCreate = [
         .bail()
         .custom(value => validateName(value,'fullName'))
         .bail(),
-      check('profileImage')
+    body('profileImage')
         .optional()
         .custom( value => validateImage(value))
         .bail(),
+    body('roleId')
+        .exists()
+        .not()
+        .isEmpty()
+        .withMessage('Must have a Role'),
     (req,res,next)=>{
         validateResult(req,res,next)
     }
@@ -45,7 +50,7 @@ const findUser = async (email) => {
 }
 
 const validateUserLogin = [
-  check('email')
+  body('email')
       .exists()
       .not()
       .isEmpty()
@@ -58,7 +63,7 @@ const validateUserLogin = [
         const userEmail = await findUser(value)
         if (!userEmail) throw new Error("Email no encontrado!");
       }),
-  check('password')
+  body('password')
       .exists()
       .not()
       .isEmpty()
@@ -75,7 +80,7 @@ const validateUserUpdate = [
       .not()
       .isEmpty()
       .isUUID(v4),
-  check('fullName')
+  body('fullName')
       .exists()
       .not()
       .isEmpty()
@@ -83,7 +88,7 @@ const validateUserUpdate = [
       .bail()
       .custom(value => validateName(value,'fullName'))
       .bail(),
-  check('profileImage')
+  body('profileImage')
       .optional()
       .custom( value => validateImage(value))
       .bail(),

@@ -21,6 +21,7 @@ const validateProductCreate = [
         .not()
         .isEmpty()
         .isString()
+        .custom( value => validateName(value,'description'))
         .bail(),
     check('categoryId')
         .exists()

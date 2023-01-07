@@ -1,6 +1,6 @@
 const { Question } = require("../db");
 const { v4: uuidv4 } = require("uuid");
-const { paginate } = require("../utils/paginate");
+const { paginate } = require("../config/paginate");
 const { convertDate } = require("../utils/convertDate");
 
 const getAllQuestions = async (page=0,pageSize=10) => {
@@ -20,7 +20,7 @@ const getAllQuestions = async (page=0,pageSize=10) => {
         isRead: q.isRead,
         isAnswered: q.isAnswered,
         date: convertDate(q.createdAt),
-        phone:q.phone
+        phone: q.phone
       });
     });
   

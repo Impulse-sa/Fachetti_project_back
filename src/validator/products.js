@@ -63,7 +63,7 @@ const validateProductBanned = [
         .not()
         .isEmpty()
         .isUUID(),
-    query('isBanned')
+    query('banned')
         .exists()
         .not()
         .isEmpty()

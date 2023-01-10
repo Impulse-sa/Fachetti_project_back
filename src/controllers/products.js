@@ -191,6 +191,21 @@ const updateProduct = async (id, data) => {
   }
 };
 
+const deleteProduct = async (id) => {
+  try {
+    const productDeleted = await Product.destroy(
+      {
+        where: {
+          id
+        }
+      }
+    )
+    return productDeleted
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
 module.exports = {
   createProduct,
   getAllProducts,
@@ -200,4 +215,5 @@ module.exports = {
   getAllProductsByCategory,
   getAllProductsByCategoryAndBanned,
   updateProduct,
+  deleteProduct
 };

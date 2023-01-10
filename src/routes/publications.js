@@ -5,6 +5,7 @@ const publicationController = require("../controllers/publications");
 const {validatePublicationCreate, validatePublicationUpdate} = require('../validator/publications')
 
 const auth = require('../config/auth')
+const authRole = require('../config/authRole')
 
 router.get("/banned", auth, async (req, res) => {
   try {
@@ -101,6 +102,18 @@ router.put("/:id", auth, async (req, res) => {
       const result = await publicationController.setImportant(id, important);
       return res.status(200).json(result);
     }
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+});
+
+router.delete("/:id", authRole(['globalAdmin']), async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await publicationController.deletePublication(id);
+    if (result) return res.status(200).json('Product deleted succesfully');
+    res.status(304).json('Product does not deleted')
   } catch (error) {
     res.status(400).json(error.message);
   }

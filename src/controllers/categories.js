@@ -105,10 +105,25 @@ const setBanned = async (id, banned) => {
   }
 };
 
+const deleteCategory = async (id) => {
+  try {
+    const dbResult = await Category.destroy(
+      {
+        where: {
+          id
+        }
+      }
+    )
+    return dbResult
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
 module.exports = {
   createCategory,
   getAllCategories,
   getAllCategoriesAndBanned,
   setBanned,
   getCategoryById,
+  deleteCategory
 };

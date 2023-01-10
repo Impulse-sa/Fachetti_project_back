@@ -6,6 +6,7 @@ const categoryController = require("../controllers/categories");
 const {validateCategoryCreate, validateCategoryUpdate, validateCategoryBanned} = require('../validator/categories')
 
 const auth = require('../config/auth')
+const authRole = require('../config/authRole')
 
 router.get("/", async (req, res) => {
   try {
@@ -72,6 +73,18 @@ router.put("/:id", auth, validateCategoryBanned, async (req, res) => {
   try {
     const result = await categoryController.setBanned(id, banned);
     return res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+});
+
+router.delete("/:id", authRole(['globalAdmin']), async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await categoryController.deleteCategory(id);
+    if (result) return res.status(200).json('Category deleted succesfully');
+    res.status(304).json('Category does not deleted')
   } catch (error) {
     res.status(400).json(error.message);
   }

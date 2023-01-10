@@ -127,6 +127,21 @@ const updateRoleUser = async (id, roleId) => {
     throw new Error(error.message);
   }
 }
+
+const deleteUser = async (id) => {
+  try {
+    const dbResult = await Category.destroy(
+      {
+        where: {
+          id
+        }
+      }
+    )
+    return dbResult
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
 module.exports = {
   createUser,
   getUserById,
@@ -134,5 +149,5 @@ module.exports = {
   updateUser,
   bannedUser,
   updateRoleUser,
-
+  deleteUser
 };

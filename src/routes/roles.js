@@ -2,8 +2,8 @@ const { Router } = require("express");
 const router = Router();
 const { Role } = require("../db");
 
+const roleController = require('../controllers/roles');
 
-const roleControllers = require('../controllers/roles');
 const authRole = require("../config/authRole");
 
 router.post('/', authRole(['globalAdmin']), async (req,res)=>{
@@ -20,7 +20,7 @@ router.post('/', authRole(['globalAdmin']), async (req,res)=>{
             return res.status(400).json("Ya existe un rol con ese nombre");
           }
 
-        const role = await roleControllers.createRole(name, description)
+        const role = await roleController.createRole(name, description)
         res.status(201).json(role)
     } catch (error) {
         res.status(400).send(error.message)
@@ -30,7 +30,7 @@ router.post('/', authRole(['globalAdmin']), async (req,res)=>{
 router.get('/', authRole(['globalAdmin']), async (req,res)=>{
     
     try {
-        const roles = await roleControllers.getAllRoles()
+        const roles = await roleController.getAllRoles()
         res.status(201).json(roles)
     } catch (error) {
         res.status(400).send(error.message)
@@ -41,7 +41,7 @@ router.get('/:id', authRole(['globalAdmin']), async (req,res)=>{
     const {id} = req.params
 
     try {
-        const role = await roleControllers.getRole(id)
+        const role = await roleController.getRole(id)
         res.status(201).json(role)
     } catch (error) {
         res.status(400).send(error.message)
@@ -53,7 +53,7 @@ router.put('/:id', authRole(['globalAdmin']), async (req,res)=>{
     const {isBanned} = req.query
 
     try {
-        const role = await roleControllers.bannedRole(id,isBanned)
+        const role = await roleController.bannedRole(id,isBanned)
         res.status(201).json(role)
     } catch (error) {
         res.status(400).send(error.message)
@@ -65,11 +65,22 @@ router.put('/:id', authRole(['globalAdmin']), async (req,res)=>{
     const {name, description} = req.body
     
     try {
-        const role = await roleControllers.updateRole(id, name, description)
+        const role = await roleController.updateRole(id, name, description)
         res.status(201).json(role)
     } catch (error) {
         res.status(400).send(error.message)
     }
 })
 
+router.delete("/:id", authRole(['globalAdmin']), async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      const result = await roleController.deleteRole(id);
+      if (result) return res.status(200).json('Role deleted succesfully');
+      res.status(304).json('Role does not deleted')
+    } catch (error) {
+      res.status(400).json(error.message);
+    }
+  });
 module.exports = router

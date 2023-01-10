@@ -238,6 +238,21 @@ const setReaded = async (id, readed) => {
   }
 };
 
+const deleteQuestion = async (id) => {
+  try {
+    const dbResult = await Question.destroy(
+      {
+        where: {
+          id
+        }
+      }
+    )
+    return dbResult
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
 module.exports = {
   createQuestion,
   getAllQuestions,
@@ -246,5 +261,6 @@ module.exports = {
   getAllQuestionsAnswered,
   setAnswered,
   getQuestionById,
-  setReaded
+  setReaded,
+  deleteQuestion
 };

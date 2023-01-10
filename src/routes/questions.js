@@ -1,6 +1,8 @@
 const { Router } = require("express");
-const auth = require("../config/auth");
 const router = Router();
+
+const auth = require("../config/auth");
+const authRole = require('../config/authRole')
 
 const questionController = require("../controllers/questions");
 const { sendMail } = require("../utils/emailer");
@@ -93,6 +95,18 @@ router.put("/:id", auth, validateQuestionUpdate, async (req, res) => {
     console.log(error)
     res.status(400).json(error.message);
     return
+  }
+});
+
+router.delete("/:id", authRole(['globalAdmin']), async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await questionController.deleteQuestion(id);
+    if (result) return res.status(200).json('Question deleted succesfully');
+    res.status(304).json('Question does not deleted')
+  } catch (error) {
+    res.status(400).json(error.message);
   }
 });
 

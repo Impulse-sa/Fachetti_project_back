@@ -77,10 +77,26 @@ const updateRole = async (id, name, description) => {
     }
 }
 
+const deleteRole = async (id) => {
+    try {
+      const dbResult = await Category.destroy(
+        {
+          where: {
+            id
+          }
+        }
+      )
+      return dbResult
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
 module.exports = {
     createRole,
     getAllRoles,
     getRole,
     bannedRole,
-    updateRole
+    updateRole,
+    deleteRole
 }

@@ -165,6 +165,20 @@ const updatePublication = async (id, data) => {
   }
 };
 
+const deletePublication = async (id) => {
+  try {
+    const dbResult = await Publication.destroy(
+      {
+        where: {
+          id
+        }
+      }
+    )
+    return dbResult
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
 module.exports = {
   createPublication,
   getAllPublications,
@@ -174,4 +188,5 @@ module.exports = {
   setImportant,
   getImportantPublications,
   updatePublication,
+  deletePublication
 };

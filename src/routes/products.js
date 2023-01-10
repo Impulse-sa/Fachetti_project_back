@@ -8,6 +8,7 @@ const productController = require("../controllers/products");
 const {validateProductCreate, validateProductUpdate, validateProductBanned} = require('../validator/products')
 
 const auth = require("../config/auth");
+const authRole = require('../config/authRole')
 
 router.get("/banned", auth, async (req, res) => {
   try {
@@ -122,6 +123,18 @@ router.put("/edit/:id", auth, validateProductUpdate, async (req, res) => {
   try {
     const productUpdated = await productController.updateProduct(id, data);
     if (productUpdated) res.status(200).json(productUpdated);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+});
+
+router.delete("/:id", authRole(['globalAdmin']), async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await productController.deleteCategory(id);
+    if (result) return res.status(200).json('Product deleted succesfully');
+    res.status(304).json('Product does not deleted')
   } catch (error) {
     res.status(400).json(error.message);
   }

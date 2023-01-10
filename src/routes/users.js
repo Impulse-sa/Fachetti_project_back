@@ -133,4 +133,16 @@ router.put('/banned/:id', authRole(['globalAdmin']), validateUserBanned, async (
   }
 })
 
+router.delete("/:id", authRole(['globalAdmin']), async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await userController.deleteUser(id);
+    if (result) return res.status(200).json('User deleted succesfully');
+    res.status(304).json('User does not deleted')
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+});
+
 module.exports = router;

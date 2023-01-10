@@ -1,5 +1,5 @@
 const {check, query, param, body} = require('express-validator')
-const { validateResult, validateName, validateImage } = require('../utils/validateHelper')
+const { validateResult, validateName, validateImage, validateDescription } = require('../utils/validateHelper')
 
 const validateProductCreate = [
     check('name')
@@ -21,7 +21,7 @@ const validateProductCreate = [
         .not()
         .isEmpty()
         .isString()
-        .custom( value => validateName(value,'description'))
+        .custom( value => validateDescription(value))
         .bail(),
     check('categoryId')
         .exists()
@@ -51,6 +51,11 @@ const validateProductUpdate = [
         .not()
         .isEmpty()
         .custom( value => validateImage(value))
+        .bail(),
+    check('description')
+        .optional()
+        .isString()
+        .custom( value => validateDescription(value))
         .bail(),
     (req,res,next)=>{
         validateResult(req,res,next)

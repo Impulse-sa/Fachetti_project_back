@@ -20,6 +20,16 @@ const validateName = ( value, str = 'name') => {
     return true;
 }
 
+const validateDescription = ( value, str = 'description') => {
+  const regExName = /^[a-zA-Z0-9ñÑáéíóúüÁÉÍÓÚÜ ¡!-/:;=?@[-`{},_'+.*&%`~\t\v\r\n]+$/
+
+  if (!regExName.test(value)) {
+    throw new Error(`${str} is not valid`);
+  }
+  // Indicates the success of this synchronous custom validator
+  return true;
+}
+
 const validateImage = value => {
     if (value) {
       const regExName = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gmi
@@ -57,5 +67,6 @@ module.exports = {
     validateImage,
     validatePassword,
     findUser,
-    validateExistCategory
+    validateExistCategory,
+    validateDescription
 }

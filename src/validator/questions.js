@@ -1,5 +1,5 @@
 const {body, param, query} = require('express-validator')
-const { validateResult, validateImage, validateName, validatePassword } = require('../utils/validateHelper')
+const { validateResult, validateImage, validateName, validatePassword, validateDescription } = require('../utils/validateHelper')
 
 const { v4 } = require('uuid');
 
@@ -26,7 +26,7 @@ const validateQuestionCreate = [
         .not()
         .isEmpty()
         .isString()
-        .custom( value => validateName(value,'message'))
+        .custom( value => validateDescription(value,'message'))
         .bail(),
     body('phone')
         .optional()

@@ -1,5 +1,5 @@
 const {check, query, param, body} = require('express-validator')
-const { validateResult, validateName, validateImage } = require('../utils/validateHelper')
+const { validateResult, validateName, validateImage, validateDescription } = require('../utils/validateHelper')
 
 const validatePublicationCreate = [
     check('title')
@@ -49,7 +49,7 @@ const validatePublicationUpdate = [
         .not()
         .isEmpty()
         .isLength({min:30,max:300})
-        .custom( value => validateName(value, 'description'))
+        .custom( value => validateDescription(value))
         .bail(),
     body('isBanned')
         .exists()

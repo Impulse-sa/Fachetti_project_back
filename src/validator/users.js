@@ -69,7 +69,7 @@ const validateUserLogin = [
 ]
 
 const validateUserUpdate = [
-  param('id')
+  body('id')
       .exists()
       .not()
       .isEmpty()

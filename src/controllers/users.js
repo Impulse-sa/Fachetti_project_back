@@ -78,7 +78,7 @@ const updateUser = async (data) => {
     )
     if (!updatedUser) throw new Error('Usuario no encontrado')
 
-    const user = await User.findByPk(id)
+    const user = await User.findByPk(data.userId)
     return user;
   
   } catch (error) {

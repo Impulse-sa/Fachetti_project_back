@@ -94,7 +94,7 @@ router.get('/:id', auth, async (req,res)=>{
   }
 })
 
-router.put('/:id', auth, validateUserUpdate, async (req,res)=>{
+router.put('/', auth, validateUserUpdate, async (req,res)=>{
   const data = req.body
 
   try {
@@ -120,7 +120,7 @@ router.put('/:id', auth, validateUserUpdate, async (req,res)=>{
   }
 })
 
-router.put('/:id', authRole(['globalAdmin']), validateUserBanned, async (req, res)=>{
+router.put('/banned/:id', authRole(['globalAdmin']), validateUserBanned, async (req, res)=>{
   const {id} = req.params;
   const {isBanned} = req.query;
 

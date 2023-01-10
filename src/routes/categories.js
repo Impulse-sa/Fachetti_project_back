@@ -37,9 +37,6 @@ router.get("/banned", auth, async (req, res) => {
 router.post("/", auth, validateCategoryCreate, async (req, res) => {
     const { name, image } = req.body;
 
-    if (!name) return res.status(400).json("Falta el nombre de la categoría");
-    if (!image) return res.status(400).json("Falta la imagen de la categoría");
-
     try {
       const categoryExist = await Category.findOne({ where: { name } });
       if (categoryExist) return res.status(400).json("La categoría ya existe");

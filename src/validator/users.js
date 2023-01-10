@@ -1,6 +1,5 @@
 const {body, param, query} = require('express-validator')
-const { validateResult, validateImage, validateName, validatePassword } = require('../utils/validateHelper')
-const { User } = require("../db");
+const { validateResult, validateImage, validateName, validatePassword, findUser } = require('../utils/validateHelper')
 const { v4 } = require('uuid');
 
 const validateUserCreate = [
@@ -44,11 +43,6 @@ const validateUserCreate = [
 ]
 
 
-const findUser = async (email) => {
-  var userEmail = await User.findOne({ where: { email } });
-  return userEmail
-}
-
 const validateUserLogin = [
   body('email')
       .exists()
@@ -79,7 +73,7 @@ const validateUserUpdate = [
       .exists()
       .not()
       .isEmpty()
-      .isUUID(v4),
+      .isUUID(),
   body('fullName')
       .exists()
       .not()
@@ -102,7 +96,7 @@ const validateUserBanned = [
       .exists()
       .not()
       .isEmpty()
-      .isUUID(v4),
+      .isUUID(),
   query('isBanned')
       .exists()
       .not()

@@ -95,11 +95,10 @@ router.get('/:id', auth, async (req,res)=>{
 })
 
 router.put('/:id', auth, validateUserUpdate, async (req,res)=>{
-  const {id} = req.params
   const data = req.body
 
   try {
-    const user = await userController.updateUser(id, data)
+    const user = await userController.updateUser(data)
     console.log(user)
     if (!user) {
       return res.status(200).json("User not found");

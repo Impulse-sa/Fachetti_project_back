@@ -1,4 +1,5 @@
 const {validationResult}=require('express-validator')
+const { User, Category } = require("../db");
 
 const validateResult = (req,res,next)=>{
     try {
@@ -41,9 +42,20 @@ const validatePassword = value => {
   return true;
 }
 
+const validateExistCategory = async (value) => {
+  const categoryExist = await Category.findOne({ where: { name: value } });
+  return categoryExist
+}
+const findUser = async (email) => {
+  var userEmail = await User.findOne({ where: { email } });
+  return userEmail
+}
+
 module.exports = {
     validateResult,
     validateName,
     validateImage,
-    validatePassword
+    validatePassword,
+    findUser,
+    validateExistCategory
 }

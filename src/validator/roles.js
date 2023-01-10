@@ -29,7 +29,7 @@ const validateRoleBanned = [
         .exists()
         .not()
         .isEmpty()
-        .isUUID(v4),
+        .isUUID(),
     query('isBanned')
         .exists()
         .not()
@@ -45,7 +45,7 @@ const validateRoleBanned = [
         .exists()
         .not()
         .isEmpty()
-        .isUUID(v4),
+        .isUUID(),
     body('name')
         .optional()
         .exists()

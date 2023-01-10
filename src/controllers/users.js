@@ -63,7 +63,7 @@ const createUser = async (email, password, fullName, profileImage, roleId) => {
   }
 };
 
-const updateUser = async (id, data) => {
+const updateUser = async (data) => {
   try {
     const updatedUser = await User.update(
       {
@@ -72,7 +72,7 @@ const updateUser = async (id, data) => {
       },
       {
         where: {
-        id
+        id: data.userId
         }
       }
     )

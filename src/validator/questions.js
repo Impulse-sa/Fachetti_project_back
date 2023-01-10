@@ -43,7 +43,7 @@ const validateQuestionUpdate = [
         .exists()
         .not()
         .isEmpty()
-        .isUUID(v4)
+        .isUUID()
         .bail(),
     query('answered')
         .optional()

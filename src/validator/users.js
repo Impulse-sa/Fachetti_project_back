@@ -62,6 +62,8 @@ const validateUserLogin = [
       .not()
       .isEmpty()
       .withMessage('Must have a password')
+      .bail()
+      .custom(value => validatePassword(value))
       .bail(),
   (req,res,next)=>{
     validateResult(req,res,next)
@@ -106,11 +108,65 @@ const validateUserBanned = [
     validateResult(req,res,next)
   }
 ]
+
+const validateChangePassword = [
+    body('email')
+      .exists()
+      .not()
+      .isEmpty()
+      .toLowerCase()
+      .normalizeEmail()
+      .isEmail()
+      .withMessage('Must be a valid email')
+      .bail()
+      .custom( async (value) => {
+        const userEmail = await findUser(value)
+        if (!userEmail) throw new Error("Email no encontrado!");
+      }),
+    body('password')
+      .exists()
+      .not()
+      .isEmpty()
+      .withMessage('Must have a password')
+      .bail(),
+    body('newPassword')
+      .exists()
+      .not()
+      .isEmpty()
+      .withMessage('Must have a newPassword')
+      .bail()
+      .custom(value => validatePassword(value))
+      .bail(),
+    (req,res,next)=>{
+    validateResult(req,res,next)
+    }
+]
+
+const validateEmail = [
+    body('email')
+      .exists()
+      .not()
+      .isEmpty()
+      .toLowerCase()
+      .normalizeEmail()
+      .isEmail()
+      .withMessage('Must be a valid email')
+      .bail()
+      .custom( async (value) => {
+        const userEmail = await findUser(value)
+        if (!userEmail) throw new Error("Email no encontrado!");
+      }),
+    (req,res,next)=>{
+    validateResult(req,res,next)
+    }
+]
 module.exports = {
   validateUserCreate, 
   validateUserLogin,
   validateUserUpdate,
-  validateUserBanned
+  validateUserBanned,
+  validateChangePassword,
+  validateEmail
 }
 
 // RegEx Explanation

@@ -6,7 +6,7 @@ const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcryptjs");
 
 const userController = require("../controllers/users");
-const {validateUserCreate, validateUserLogin, validateUserUpdate, validateUserBanned} = require('../validator/users')
+const {validateUserCreate, validateUserLogin, validateUserUpdate, validateUserBanned, validateChangePassword, validateEmail} = require('../validator/users')
 
 const jwt = require("jsonwebtoken");
 const auth = require('../config/auth')
@@ -17,9 +17,7 @@ router.post("/login", validateUserLogin, async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const userEmail = await User.findOne({ where: { email } });
-    const validatePassword = await bcrypt.compare(password, userEmail.password)
-    if (!validatePassword) throw new Error('Invalid Password')
+    const userEmail = await userController.validatePassword(email,password)
   
     const token = jwt.sign(
       {
@@ -43,6 +41,7 @@ router.post("/", authRole(['globalAdmin']), validateUserCreate, async (req, res)
   const { email, password, fullName, profileImage, roleId } = req.body;
 
   try {
+    //Reemplazar por checkUserEmail
     const emailExist = await User.findOne({
       where: {
         email,
@@ -127,6 +126,32 @@ router.put('/banned/:id', authRole(['globalAdmin']), validateUserBanned, async (
   try {
     const userBanned = await userController.bannedUser(id, isBanned)
     res.status(201).json(userBanned)
+
+  } catch (error) {
+    res.status(400).send(error.message)
+  }
+})
+
+router.put('/changePassword', auth, validateChangePassword, async (req,res)=> {
+  const {email, password, newPassword} = req.body
+
+  try {
+    const user = await userController.validatePassword(email, password)
+    const userUpdated = await userController.changePassword(user, newPassword)
+    if (userUpdated) res.status(200).json('Password changed succesfully!')
+    else res.status(400).json('Something went wrong with the new password')
+
+  } catch (error) {
+    res.status(400).send(error.message)
+  }
+})
+
+router.put('/forgotPassword', validateEmail, async (req,res) => {
+  const {email} = req.body;
+  
+  try {
+    userController.checkEmail(email)
+    const randomPassword = Math.random().toString(36).slice(-8)
 
   } catch (error) {
     res.status(400).send(error.message)

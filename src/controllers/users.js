@@ -142,6 +142,44 @@ const deleteUser = async (id) => {
     throw new Error(error.message);
   }
 }
+
+const validatePassword = async (email,password) => {
+  const user = await User.findOne({ where: { email } });
+    const validatePassword = await bcrypt.compare(password, user.password)
+    if (!validatePassword) throw new Error('Invalid Password')
+    else return user
+}
+
+const changePassword = async (user,newPassword) => {
+  const updatedUser = User.update(
+    {
+      password: await bcrypt.hash(newPassword, 10),
+    },
+    {
+      where: {
+        id: user.id
+      }
+    }
+  )
+  return updatedUser
+}
+
+const checkEmail = async (email) => {
+  try {
+    const emailExist = await User.findOne({
+      where: {
+        email,
+      },
+    });
+    if (!emailExist) {
+     throw new Error('Email does not exist')
+    }
+    return
+    
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
 module.exports = {
   createUser,
   getUserById,
@@ -149,5 +187,8 @@ module.exports = {
   updateUser,
   bannedUser,
   updateRoleUser,
-  deleteUser
+  deleteUser,
+  validatePassword,
+  changePassword,
+  checkEmail
 };

@@ -8,5 +8,74 @@
 </head>
 <body>
     <h1>Fachetti Back-End</h1>
+    <h3>Rutas</h3>
+    <h4>Categories</h4>
+    <ul>
+        <h5>GET</h5>
+        <li>'/': active categories</li>
+        <li>'/banned': active and banned categories</li>
+    </br>
+        <h5>POST</h5>
+        <li>'/': new category</li>
+    </br>
+        <h5>PUT</h5>
+        <li>'/:id': update category by id</li>
+        <li>'/banned/:id': logic deleted for category</li>
+    </br>
+        <h5>DELETE</h5>
+        <li>'/:id': delete category by id</li>
+    </ul>
+    <h4>Products</h4>
+    <ul>
+        <h5>GET</h5>
+        <li>'/': active products</li>
+        <li>'/banned': active and banned products</li>
+        <li>'/:id': get one product by id</li>
+        <li>'/categories/:category': get all products by specific category name</li>
+        <li>'/categories/:category/banned': get all products by specific category name (active and banned)</li>
+    </br>
+        <h5>POST</h5>
+        <li>'/': new product</li>
+    </br>
+        <h5>PUT</h5>
+        <li>'/:id': update publication by id</li>
+        <li>'/banned/:id': logic deleted for publication</li>
+    </br>
+        <h5>DELETE</h5>
+        <li>'/:id': delete publication by id</li>
+    </ul>
+    <h4>Publications</h4>
+    <ul>
+        <h5>GET</h5>
+        <li>'/': active publications</li>
+        <li>'/banned': active and banned publications</li>
+        <li>'/:id': get one publications by id</li>
+        <li>'/important': get all important publications </li>
+    </br>
+        <h5>POST</h5>
+        <li>'/': new publication</li>
+    </br>
+        <h5>PUT</h5>
+        <li>'/:id': update publication by id</li>
+        <li>'/banned/:id': logic deleted for publication</li>
+    </br>
+        <h5>DELETE</h5>
+        <li>'/:id': delete publication by id</li>
+    </ul>
+    <h4>Questions</h4>
+    <ul>
+        <h5>GET</h5>
+        <li>'/': active questions.  Answered, readed, page and sizePage by query.</li>
+        <li>'/:id': get one question by id</li>
+    </br>
+        <h5>POST</h5>
+        <li>'/': new question</li>
+    </br>
+        <h5>PUT</h5>
+        <li>'/:id': update question by id. Answered and readed by query.</li>
+    </br>
+        <h5>DELETE</h5>
+        <li>'/:id': delete question by id</li>
+    </ul>
 </body>
 </html>

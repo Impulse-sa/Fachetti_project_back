@@ -66,7 +66,7 @@ router.put("/:id", auth, validateCategoryUpdate, async (req, res) => {
   }
 });
 
-router.put("/:id", auth, validateCategoryBanned, async (req, res) => {
+router.put("/banned/:id", auth, validateCategoryBanned, async (req, res) => {
   const { id } = req.params;
   const { banned } = req.query;
 

@@ -7,6 +7,31 @@ const {validatePublicationCreate, validatePublicationUpdate} = require('../valid
 const auth = require('../config/auth')
 const authRole = require('../config/authRole')
 
+router.get("/", async (req, res) => {
+  try {
+    const publications = await publicationController.getAllPublications();
+    if (!publications.length)
+      return res.status(200).json("No hay publicaciones guardadas!");
+
+    res.status(200).json(publications);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const publication = await publicationController.getPublicationById(id);
+    if (!publication)
+      return res.status(404).json("No se encontró la publicación!");
+    res.status(200).json(publication);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+});
+
 router.get("/banned", auth, async (req, res) => {
   try {
     const publications =
@@ -32,31 +57,6 @@ router.get("/important", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const publication = await publicationController.getPublicationById(id);
-    if (!publication)
-      return res.status(404).json("No se encontró la publicación!");
-    res.status(200).json(publication);
-  } catch (error) {
-    res.status(400).json(error.message);
-  }
-});
-
-router.get("/", async (req, res) => {
-  try {
-    const publications = await publicationController.getAllPublications();
-    if (!publications.length)
-      return res.status(200).json("No hay publicaciones guardadas!");
-
-    res.status(200).json(publications);
-  } catch (error) {
-    res.status(400).json(error.message);
-  }
-});
-
 router.post("/", auth, validatePublicationCreate, async (req, res) => {
     const { title, image } = req.body;
 
@@ -74,7 +74,7 @@ router.post("/", auth, validatePublicationCreate, async (req, res) => {
   }
 );
 
-router.put("/edit/:id", auth, validatePublicationUpdate, async (req, res) => {
+router.put("/:id", auth, validatePublicationUpdate, async (req, res) => {
   const { id } = req.params;
   const data = req.body;
 
@@ -89,7 +89,7 @@ router.put("/edit/:id", auth, validatePublicationUpdate, async (req, res) => {
   }
 });
 
-router.put("/:id", auth, async (req, res) => {
+router.put("/banned/:id", auth, async (req, res) => {
   const { id } = req.params;
   const { banned, important } = req.query;
 

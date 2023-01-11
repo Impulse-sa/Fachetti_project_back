@@ -10,6 +10,19 @@ const {validateProductCreate, validateProductUpdate, validateProductBanned} = re
 const auth = require("../config/auth");
 const authRole = require('../config/authRole')
 
+router.get("/", async (req, res) => {
+  try {
+    const products = await productController.getAllProducts();
+    if (!products.length) {
+      return res.status(200).json("No se encontraron productos!");
+    }
+
+    return res.status(200).json(products);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+});
+
 router.get("/banned", auth, async (req, res) => {
   try {
     const products = await productController.getAllProductsAndBanned();
@@ -18,6 +31,20 @@ router.get("/banned", auth, async (req, res) => {
     }
 
     return res.status(200).json(products);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const product = await productController.getProductById(id);
+
+    if (!product) return res.status(404).json("Producto no encontrado!");
+
+    res.status(200).json(product);
   } catch (error) {
     res.status(400).json(error.message);
   }
@@ -55,33 +82,6 @@ router.get("/categories/:category/banned", auth, async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const product = await productController.getProductById(id);
-
-    if (!product) return res.status(404).json("Producto no encontrado!");
-
-    res.status(200).json(product);
-  } catch (error) {
-    res.status(400).json(error.message);
-  }
-});
-
-router.get("/", async (req, res) => {
-  try {
-    const products = await productController.getAllProducts();
-    if (!products.length) {
-      return res.status(200).json("No se encontraron productos!");
-    }
-
-    return res.status(200).json(products);
-  } catch (error) {
-    res.status(400).json(error.message);
-  }
-});
-
 router.post( "/", auth, validateProductCreate, async (req, res) => {
     const { name, description, categoryId, image } = req.body;
 
@@ -104,7 +104,19 @@ router.post( "/", auth, validateProductCreate, async (req, res) => {
   }
 );
 
-router.put("/:id", auth, validateProductBanned, async (req, res) => {
+router.put("/:id", auth, validateProductUpdate, async (req, res) => {
+  const { id } = req.params;
+  const data = req.body;
+
+  try {
+    const productUpdated = await productController.updateProduct(id, data);
+    if (productUpdated) res.status(200).json(productUpdated);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+});
+
+router.put("/banned/:id", auth, validateProductBanned, async (req, res) => {
   const { id } = req.params;
   const { banned } = req.query;
 
@@ -116,17 +128,6 @@ router.put("/:id", auth, validateProductBanned, async (req, res) => {
   }
 });
 
-router.put("/edit/:id", auth, validateProductUpdate, async (req, res) => {
-  const { id } = req.params;
-  const data = req.body;
-
-  try {
-    const productUpdated = await productController.updateProduct(id, data);
-    if (productUpdated) res.status(200).json(productUpdated);
-  } catch (error) {
-    res.status(400).json(error.message);
-  }
-});
 
 router.delete("/:id", authRole(['globalAdmin']), async (req, res) => {
   const { id } = req.params;

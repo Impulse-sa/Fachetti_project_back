@@ -12,6 +12,7 @@ const getCategoryById = async (id) => {
       id: dbResult.id,
       name: dbResult.name,
       image: dbResult.image,
+      isBanned: dbResult.isBanned
     };
 
     return result;
@@ -31,6 +32,7 @@ const getAllCategories = async () => {
         id: category.id,
         name: category.name,
         image: category.image,
+        isBanned: category.isBanned
       });
     });
 
@@ -51,6 +53,7 @@ const getAllCategoriesAndBanned = async () => {
         id: category.id,
         name: category.name,
         image: category.image,
+        isBanned: category.isBanned
       });
     });
 

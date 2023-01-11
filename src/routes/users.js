@@ -138,8 +138,8 @@ router.put('/changePassword', auth, validateChangePassword, async (req,res)=> {
   try {
     const user = await userController.validatePassword(email, password)
     const userUpdated = await userController.changePassword(user, newPassword)
-    if (userUpdated) res.status(200).json('Password changed succesfully!')
-    else res.status(400).json('Something went wrong with the new password')
+    if (userUpdated) return res.status(200).json('Password changed succesfully!')
+    else return res.status(400).json('Something went wrong with the new password')
 
   } catch (error) {
     res.status(400).send(error.message)

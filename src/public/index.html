@@ -16,14 +16,14 @@
         <li>'/banned': active and banned categories</li>
     </br>
         <h5>POST</h5>
-        <li>'/': new category</li>
+        <li>'/': new category. Auth required.</li>
     </br>
         <h5>PUT</h5>
-        <li>'/:id': update category by id</li>
-        <li>'/banned/:id': logic deleted for category</li>
+        <li>'/:id': update category by id. Auth required.</li>
+        <li>'/banned/:id': logic deleted for category. Auth required.</li>
     </br>
         <h5>DELETE</h5>
-        <li>'/:id': delete category by id</li>
+        <li>'/:id': delete category by id. Auth required.</li>
     </ul>
     <h4>Products</h4>
     <ul>
@@ -35,14 +35,14 @@
         <li>'/categories/:category/banned': get all products by specific category name (active and banned)</li>
     </br>
         <h5>POST</h5>
-        <li>'/': new product</li>
+        <li>'/': new product. Auth required.</li>
     </br>
         <h5>PUT</h5>
-        <li>'/:id': update publication by id</li>
-        <li>'/banned/:id': logic deleted for publication</li>
+        <li>'/:id': update publication by id. Auth required.</li>
+        <li>'/banned/:id': logic deleted for publication. Auth required.</li>
     </br>
         <h5>DELETE</h5>
-        <li>'/:id': delete publication by id</li>
+        <li>'/:id': delete publication by id. Auth required.</li>
     </ul>
     <h4>Publications</h4>
     <ul>
@@ -53,14 +53,14 @@
         <li>'/important': get all important publications </li>
     </br>
         <h5>POST</h5>
-        <li>'/': new publication</li>
+        <li>'/': new publication. Auth required.</li>
     </br>
         <h5>PUT</h5>
-        <li>'/:id': update publication by id</li>
-        <li>'/banned/:id': logic deleted for publication</li>
+        <li>'/:id': update publication by id. Auth required.</li>
+        <li>'/banned/:id': logic deleted for publication. Auth required.</li>
     </br>
         <h5>DELETE</h5>
-        <li>'/:id': delete publication by id</li>
+        <li>'/:id': delete publication by id. Auth required.</li>
     </ul>
     <h4>Questions</h4>
     <ul>
@@ -69,13 +69,13 @@
         <li>'/:id': get one question by id</li>
     </br>
         <h5>POST</h5>
-        <li>'/': new question</li>
+        <li>'/': new question. Auth required.</li>
     </br>
         <h5>PUT</h5>
-        <li>'/:id': update question by id. Answered and readed by query.</li>
+        <li>'/:id': update question by id. Answered and readed by query. Auth required.</li>
     </br>
         <h5>DELETE</h5>
-        <li>'/:id': delete question by id</li>
+        <li>'/:id': delete question by id. Auth required.</li>
     </ul>
 </body>
 </html>

@@ -7,7 +7,8 @@ const validatePublicationCreate = [
         .not()
         .isEmpty()
         .isString()
-        .custom( value => validateName(value, 'title'))
+        .isLength({min:3,max:30})
+        .custom( value => validateDescription(value, 'title'))
         .bail(),
     check('isImportant')
         .optional()

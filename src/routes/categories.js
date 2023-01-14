@@ -13,7 +13,7 @@ router.get("/:id", async (req, res) => {
   try {
     let categories
     if(!id) categories = await categoryController.getAllCategories();
-    categories = await categoryController.getCategoryById(id)
+    else categories = await categoryController.getCategoryById(id)
 
     if (!categories.length) {
       return res.status(200).json("No se encontraron categorías!");

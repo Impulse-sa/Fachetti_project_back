@@ -11,14 +11,15 @@ cloudinary.config({
   secure: true,
 });
 
-const uploadImage = async (filePath) => {
+const uploadImage = async (filePath,name) => {
   return await cloudinary.uploader.upload(filePath, {
-    folder: "fachetti",
+    folder: 'ewines',
     transformation: {
       width: 300,
-      height: 400,
+      height: 300,
       gravity: "auto",
-      crop: "fill"
+      crop: "fill",
+      // resize: 'limit'
     },
   });
 };

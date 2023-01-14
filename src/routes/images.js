@@ -41,15 +41,15 @@ router.post(
   async (req, res) => {
     try {
       if (req.files?.image) {
-        console.log(req)
-        const result = await uploadImage(req.files.image.tempFilePath);
+        const result = await uploadImage(req.files.image.tempFilePath,req.body.name);
         const imageCreated = await imageController.createImage(
           result.secure_url,
           result.public_id
         );
         await fs.unlink(req.files.image.tempFilePath);
-      }
-      res.status(201).json(imageCreated?imageCreated:'no se pudo crear la imagen');
+        return res.status(201).json(imageCreated ? imageCreated : 'no se pudo crear la imagen');
+      } else return res.status(400).json('Falta imagen adjunta')
+
     } catch (error) {
       res.status(400).json(error.message);
     }

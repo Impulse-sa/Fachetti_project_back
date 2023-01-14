@@ -73,10 +73,10 @@ router.post("/", auth, validateCategoryCreate, async (req, res) => {
 
 router.put("/:id", auth, validateCategoryUpdate, async (req, res) => {
   const { id } = req.params;
-  const { name, image } = req.body;
+  const data = req.body;
 
   try {
-    const result = await categoryController.updateCategory(id, banned);
+    const result = await categoryController.updateCategory(id, data);
     return res.status(200).json(result);
   } catch (error) {
     res.status(400).json(error.message);

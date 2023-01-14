@@ -108,6 +108,22 @@ const setBanned = async (id, banned) => {
   }
 };
 
+const updateCategory = async (id, data) => {
+  try {
+    const categoryUpdated = await Category.update(data, {
+      where: {
+        id,
+      },
+    });
+    if (categoryUpdated) {
+      const category = await getCategoryById(id);
+      return category;
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 const deleteCategory = async (id) => {
   try {
     const dbResult = await Category.destroy(
@@ -128,5 +144,6 @@ module.exports = {
   getAllCategoriesAndBanned,
   setBanned,
   getCategoryById,
-  deleteCategory
+  deleteCategory,
+  updateCategory
 };

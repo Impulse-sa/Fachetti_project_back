@@ -19,19 +19,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const publication = await publicationController.getPublicationById(id);
-    if (!publication)
-      return res.status(404).json("No se encontró la publicación!");
-    res.status(200).json(publication);
-  } catch (error) {
-    res.status(400).json(error.message);
-  }
-});
-
 router.get("/banned", auth, async (req, res) => {
   try {
     const publications =
@@ -52,6 +39,19 @@ router.get("/important", async (req, res) => {
       return res.status(200).json("No hay publicaciones destacadas!");
 
     res.status(200).json(publications);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const publication = await publicationController.getPublicationById(id);
+    if (!publication)
+      return res.status(404).json("No se encontró la publicación!");
+    res.status(200).json(publication);
   } catch (error) {
     res.status(400).json(error.message);
   }

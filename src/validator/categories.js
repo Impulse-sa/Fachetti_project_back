@@ -30,13 +30,14 @@ const validateCategoryUpdate = [
         .exists()
         .not()
         .isEmpty()
-        .isBoolean()
+        .isString()
+        .isLength({min: 3, max: 30}).withMessage('Min characters: 3, Max characters: 30')
         .custom(value => validateName(value,'name')),
     body('image')
         .exists()
         .not()
         .isEmpty()
-        .isBoolean()
+        .isString()
         .custom( value => validateImage(value)),
     (req,res,next)=>{
         validateResult(req,res,next)

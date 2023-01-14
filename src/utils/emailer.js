@@ -1,6 +1,5 @@
 const nodemailer = require('nodemailer')
 const nodemailerSendgrid = require('nodemailer-sendgrid')
-const {htmlTemplate} = require('../public/Nueva consulta Fachetti')
 const {SENDGRID_API_KEY, GOOGLE_API_KEY, GOOGLE_EMAIL} = process.env
 const createTrans = ()=>{
     const transport = nodemailer.createTransport({
@@ -30,13 +29,13 @@ transport.verify(function (error, success) {
     }
   })
 
-const sendMail = async (name, email) =>{
+const sendMail = async (email, subject, name, html) =>{
     const transporter = createTrans()
     const info = await transporter.sendMail({
         from: ' "Notification" <impulsesa10@gmail.com> ',
         to: email,
-        subject: `Tienes una nueva consulta de ${name}`,
-        html: htmlTemplate
+        subject: `${subject} ${name}`,
+        html
     })
     console.log("Message sent: ", info)
 

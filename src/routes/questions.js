@@ -8,6 +8,9 @@ const questionController = require("../controllers/questions");
 const { sendMail } = require("../utils/emailer");
 const { validateQuestionCreate, validateQuestionUpdate } = require("../validator/questions");
 
+const {htmlTemplateQuestion} = require('../public/Nueva consulta Fachetti')
+const {URL_FRONT} = process.env
+
 router.get("/:id", auth, async (req, res) => {
   const { id } = req.params;
 
@@ -66,8 +69,9 @@ router.post("/", validateQuestionCreate, async (req, res) => {
       email,
       phone
     );
-
-    if (questionCreated) sendMail(name, email)
+    
+    const subject = 'Tienes una nueva consulta de'
+    if (questionCreated) sendMail( email, subject, name, htmlTemplateQuestion(`${URL_FRONT}/admin/questions`) )
     
     res.status(201).json(questionCreated);
   } catch (error) {

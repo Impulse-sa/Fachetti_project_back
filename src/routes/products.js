@@ -36,20 +36,6 @@ router.get("/banned", auth, async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const product = await productController.getProductById(id);
-
-    if (!product) return res.status(404).json("Producto no encontrado!");
-
-    res.status(200).json(product);
-  } catch (error) {
-    res.status(400).json(error.message);
-  }
-});
-
 router.get("/categories/:category", async (req, res) => {
   const { category } = req.params;
   try {
@@ -77,6 +63,20 @@ router.get("/categories/:category/banned", auth, async (req, res) => {
         .json("No se encontraron productos de esa categoría");
 
     return res.status(200).json(products);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const product = await productController.getProductById(id);
+
+    if (!product) return res.status(404).json("Producto no encontrado!");
+
+    res.status(200).json(product);
   } catch (error) {
     res.status(400).json(error.message);
   }

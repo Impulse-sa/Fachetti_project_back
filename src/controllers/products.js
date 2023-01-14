@@ -16,6 +16,7 @@ const getProductById = async (id) => {
       description: dbResult.description,
       image: dbResult.image,
       isBanned: dbResult.isBanned,
+      categoryId: dbResult.category.id,
       category: dbResult.category.name,
     };
 

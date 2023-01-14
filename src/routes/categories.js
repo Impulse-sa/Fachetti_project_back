@@ -22,6 +22,21 @@ router.get("/", async (req, res) => {
   }
 });
 
+
+router.get("/banned", auth, async (req, res) => {
+  try {
+    const categories = await categoryController.getAllCategoriesAndBanned();
+    
+    if (!categories.length) {
+      return res.status(200).json("No se encontraron categorías!");
+    }
+    
+    return res.status(200).json(categories);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+});
+
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -37,19 +52,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("/banned", auth, async (req, res) => {
-  try {
-    const categories = await categoryController.getAllCategoriesAndBanned();
-
-    if (!categories.length) {
-      return res.status(200).json("No se encontraron categorías!");
-    }
-
-    return res.status(200).json(categories);
-  } catch (error) {
-    res.status(400).json(error.message);
-  }
-});
 router.post("/", auth, validateCategoryCreate, async (req, res) => {
     const { name, image } = req.body;
 

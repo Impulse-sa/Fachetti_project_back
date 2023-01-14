@@ -160,13 +160,34 @@ const validateEmail = [
     validateResult(req,res,next)
     }
 ]
+
+const validateNewPassword = [
+  param('id')
+      .exists()
+      .not()
+      .isEmpty()
+      .isUUID(),
+  body('newPassword')
+      .exists()
+      .not()
+      .isEmpty()
+      .withMessage('Must have a newPassword')
+      .bail()
+      .custom(value => validatePassword(value))
+      .bail(),
+  (req,res,next)=>{
+  validateResult(req,res,next)
+  }
+
+]
 module.exports = {
   validateUserCreate, 
   validateUserLogin,
   validateUserUpdate,
   validateUserBanned,
   validateChangePassword,
-  validateEmail
+  validateEmail,
+  validateNewPassword
 }
 
 // RegEx Explanation

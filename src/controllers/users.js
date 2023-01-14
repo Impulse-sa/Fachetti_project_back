@@ -119,7 +119,7 @@ const updateRoleUser = async (id, roleId) => {
         }
       }
     )
-    if (!updatedUser) throw new Error('Usuario no encontrado')
+    if (!updatedUser) throw new Error('Usuario no actualizado')
     
     const user = await User.findByPk(id)
     return user;
@@ -150,6 +150,13 @@ const validatePassword = async (email,password) => {
     else return user
 }
 
+const validateUserToken = async (id,token) => {
+  const user = await User.findByPk({ where: { id } });
+    const validateToken = await bcrypt.compare(token, user.token)
+    if (!validateToken) throw new Error('Invalid Password')
+    else return user
+}
+
 const changePassword = async (user,newPassword) => {
   const updatedUser = User.update(
     {
@@ -174,8 +181,29 @@ const checkEmail = async (email) => {
     if (!emailExist) {
      throw new Error('Email does not exist')
     }
-    return
+    return emailExist
     
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+const updateUserAtribute = async (id,payload) => {
+  try {
+    const userUpdate = await User.update(
+      {
+        [payload]:payload
+      },
+      {
+        where: {
+          id
+        }
+      }
+    )
+    if (!userUpdate) throw new Error('Usuario no actualizado')
+
+    const user = await User.findByPk(id)
+    return user;
   } catch (error) {
     throw new Error(error.message);
   }
@@ -190,5 +218,7 @@ module.exports = {
   deleteUser,
   validatePassword,
   changePassword,
-  checkEmail
+  checkEmail,
+  updateUserAtribute,
+  validateUserToken
 };

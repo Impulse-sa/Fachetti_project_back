@@ -32,6 +32,10 @@ module.exports = (sequelize) => {
       isBanned: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+      },
+      token: {
+        type: DataTypes.STRING,
+        allowNull:true,
       }
     },
     {

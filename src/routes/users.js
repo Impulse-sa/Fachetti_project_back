@@ -6,12 +6,14 @@ const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcryptjs");
 
 const userController = require("../controllers/users");
-const {validateUserCreate, validateUserLogin, validateUserUpdate, validateUserBanned, validateChangePassword, validateEmail} = require('../validator/users')
+const {validateUserCreate, validateUserLogin, validateUserUpdate, validateUserBanned, validateChangePassword, validateEmail, validateNewPassword} = require('../validator/users')
 
 const jwt = require("jsonwebtoken");
 const auth = require('../config/auth')
-const authRole = require('../config/authRole')
-const { RANDOM_TOKEN } = process.env;
+const authRole = require('../config/authRole');
+const { sendMail } = require("../utils/emailer");
+const { htmlTemplateChangePassword } = require("../public/ChangePassword");
+const { RANDOM_TOKEN, URL_FRONT } = process.env;
 
 router.post("/login", validateUserLogin, async (req, res) => {
   const { email, password } = req.body;
@@ -150,14 +152,45 @@ router.put('/forgotPassword', validateEmail, async (req,res) => {
   const {email} = req.body;
   
   try {
-    userController.checkEmail(email)
-    const randomPassword = Math.random().toString(36).slice(-8)
+    const user = userController.checkEmail(email)
+    const token = jwt.sign(
+      {
+        user: user.id,
+        email,
+      },
+      RANDOM_TOKEN,
+      { expiresIn: "10m" }
+    );
+    const saveUserToken = await userController.saveToken(user.id,token)
+    console.log(saveUserToken)
+
+    const link = `${URL_FRONT}/forgotPassword/${token}`
+    const subject = 'Cambio de contraseña de'
+
+    await sendMail(email,subject,user.name, htmlTemplateChangePassword(link))
+    // const randomPassword = Math.random().toString(36).slice(-8)
 
   } catch (error) {
     res.status(400).send(error.message)
   }
 })
 
+router.put('/newPassword', authRole(['webSiteAdmin']), validateNewPassword,  async (req,res)=>{
+  const token = req.headers.autorization.split(' ')[1]
+  const {id, newPassword} = req.body
+
+  try {
+    const user = await userController.validateUserToken(id,token)
+    if (user) {
+      const updatedPassword = userController.changePassword(user,newPassword)
+      if (updatedPassword) return res.status(200).json('Password updated')
+      else return res.status(400).json('Something went wrong')
+    }
+  } catch (error) {
+    res.status(400).send(error.message)
+
+  }
+})
 router.delete("/:id", authRole(['globalAdmin']), async (req, res) => {
   const { id } = req.params;
 

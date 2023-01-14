@@ -8,9 +8,12 @@ const {validateCategoryCreate, validateCategoryUpdate, validateCategoryBanned} =
 const auth = require('../config/auth')
 const authRole = require('../config/authRole')
 
-router.get("/", async (req, res) => {
+router.get("/:id", async (req, res) => {
+  const {id} = req.params
   try {
-    const categories = await categoryController.getAllCategories();
+    let categories
+    if(!id) categories = await categoryController.getAllCategories();
+    categories = await categoryController.getCategoryById(id)
 
     if (!categories.length) {
       return res.status(200).json("No se encontraron categorías!");

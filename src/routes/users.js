@@ -152,37 +152,39 @@ router.put('/forgotPassword', validateEmail, async (req,res) => {
   const {email} = req.body;
   
   try {
-    const user = userController.checkEmail(email)
+    const user = await userController.checkEmail(email)
     const token = jwt.sign(
       {
-        user: user.id,
+        userId: user.id,
         email,
       },
       RANDOM_TOKEN,
       { expiresIn: "10m" }
     );
-    const saveUserToken = await userController.saveToken(user.id,token)
-    console.log(saveUserToken)
+    const saveUserToken = await userController.updateUserAtribute(user.id,'token',token)
+    console.log('saveUserToken', saveUserToken)
 
     const link = `${URL_FRONT}/forgotPassword/${token}`
     const subject = 'Cambio de contraseña de'
 
-    await sendMail(email,subject,user.name, htmlTemplateChangePassword(link))
-    // const randomPassword = Math.random().toString(36).slice(-8)
+    const emailStatus = await sendMail(email,subject,user.name, htmlTemplateChangePassword(link))
 
+    if (emailStatus === 'OK') res.status(200).json('Check your email!')
+    // const randomPassword = Math.random().toString(36).slice(-8)
+    else res.status(400).json('Something went wrong')
   } catch (error) {
     res.status(400).send(error.message)
   }
 })
 
-router.put('/newPassword', authRole(['webSiteAdmin']), validateNewPassword,  async (req,res)=>{
-  const token = req.headers.autorization.split(' ')[1]
+router.put('/newPassword', auth,   async (req,res)=>{
+  const token = req.headers.authorization.split(' ')[1]
   const {id, newPassword} = req.body
 
   try {
-    const user = await userController.validateUserToken(id,token)
+    const user = await userController.validateUserToken(token)
     if (user) {
-      const updatedPassword = userController.changePassword(user,newPassword)
+      const updatedPassword = await userController.changePassword(user,newPassword)
       if (updatedPassword) return res.status(200).json('Password updated')
       else return res.status(400).json('Something went wrong')
     }

@@ -162,7 +162,7 @@ const validateEmail = [
 ]
 
 const validateNewPassword = [
-  param('id')
+  body('id')
       .exists()
       .not()
       .isEmpty()

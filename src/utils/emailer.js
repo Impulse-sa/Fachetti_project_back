@@ -38,8 +38,9 @@ const sendMail = async (email, subject, name, html) =>{
         html
     })
     console.log("Message sent: ", info)
+    console.log("Message sent: ", info.response.split(' ')[2])
 
-    return
+    return info.response.split(' ')[2]
 }
 
 module.exports = {

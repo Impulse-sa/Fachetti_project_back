@@ -150,10 +150,9 @@ const validatePassword = async (email,password) => {
     else return user
 }
 
-const validateUserToken = async (id,token) => {
-  const user = await User.findByPk({ where: { id } });
-    const validateToken = await bcrypt.compare(token, user.token)
-    if (!validateToken) throw new Error('Invalid Password')
+const validateUserToken = async (token) => {
+  const user = await User.findOne({where: {token}});
+    if (!user) throw new Error('Invalid Token')
     else return user
 }
 
@@ -188,11 +187,11 @@ const checkEmail = async (email) => {
   }
 }
 
-const updateUserAtribute = async (id,payload) => {
+const updateUserAtribute = async (id,key,value) => {
   try {
     const userUpdate = await User.update(
       {
-        [payload]:payload
+        [key]:value
       },
       {
         where: {

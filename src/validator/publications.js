@@ -34,7 +34,7 @@ const validatePublicationUpdate = [
         .exists()
         .not()
         .isEmpty()
-        .custom( value => validateName(value, 'title'))
+        .custom( value => validateDescription(value, 'title'))
         .bail(),
     body('isImportant')
         .optional()

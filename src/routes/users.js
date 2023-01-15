@@ -12,7 +12,7 @@ const jwt = require("jsonwebtoken");
 const auth = require('../config/auth')
 const authRole = require('../config/authRole');
 const { sendMail } = require("../utils/emailer");
-const { htmlTemplateChangePassword } = require("../public/ChangePassword");
+const { htmlTemplateChangePassword } = require("../../public/ChangePassword");
 const { RANDOM_TOKEN, URL_FRONT } = process.env;
 
 router.post("/login", validateUserLogin, async (req, res) => {

@@ -8,7 +8,7 @@ const questionController = require("../controllers/questions");
 const { sendMail } = require("../utils/emailer");
 const { validateQuestionCreate, validateQuestionUpdate } = require("../validator/questions");
 
-const {htmlTemplateQuestion} = require('../public/Nueva consulta Fachetti')
+const {htmlTemplateQuestion} = require('../../public/Nueva consulta Fachetti')
 const {URL_FRONT} = process.env
 
 router.get("/:id", auth, async (req, res) => {

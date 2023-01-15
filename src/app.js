@@ -29,7 +29,7 @@ server.use(cors());
   res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
   next();
 }); */
-server.use(express.static(path.join(__dirname, 'public')))
+server.use(express.static('./public'))
 
 i18next.use(backend).use(middleware.LanguageDetector).init({
   fallbackLng: 'en',

@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
     categories = await categoryController.getAllCategories();
 
     if (!categories.length) {
-      return res.status(200).json("No se encontraron categorías!");
+      return res.status(200).json(req.t('categories.not_found'));
     }
 
     return res.status(200).json(categories);
@@ -28,7 +28,7 @@ router.get("/banned", auth, async (req, res) => {
     const categories = await categoryController.getAllCategoriesAndBanned();
     
     if (!categories.length) {
-      return res.status(200).json("No se encontraron categorías!");
+      return res.status(200).json(req.t('categories.not_found'));
     }
     
     return res.status(200).json(categories);
@@ -40,13 +40,13 @@ router.get("/banned", auth, async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const categori = await categoryController.getCategoryById(id);
-    console.log(categori)
-    if (!categori) {
-      return res.status(200).json("No se encontro la categoría!");
+    const category = await categoryController.getCategoryById(id);
+    console.log(category)
+    if (!category) {
+      return res.status(200).json(req.t('categories.not_found_only'));
     }
 
-    return res.status(200).json(categori);
+    return res.status(200).json(category);
   } catch (error) {
     res.status(400).json(error.message);
   }
@@ -56,8 +56,9 @@ router.post("/", auth, validateCategoryCreate, async (req, res) => {
     const { name, image } = req.body;
 
     try {
+      console.log('entre')
       const categoryExist = await Category.findOne({ where: { name } });
-      if (categoryExist) return res.status(400).json("La categoría ya existe");
+      if (categoryExist) return res.status(400).json(req.t('categories.exist'));
 
       const categoryCreated = await categoryController.createCategory(
         name,
@@ -100,8 +101,8 @@ router.delete("/:id", authRole(['globalAdmin']), async (req, res) => {
 
   try {
     const result = await categoryController.deleteCategory(id);
-    if (result) return res.status(200).json('Category deleted succesfully');
-    res.status(304).json('Category does not deleted')
+    if (result) return res.status(200).json(req.t('categories.deleted'));
+    res.status(304).json(req.t('categories.not_deleted'))
   } catch (error) {
     res.status(400).json(error.message);
   }

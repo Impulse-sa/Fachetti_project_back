@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
   try {
     const publications = await publicationController.getAllPublications();
     if (!publications.length)
-      return res.status(200).json("No hay publicaciones guardadas!");
+      return res.status(200).json(req.t('publications.not_found'));
 
     res.status(200).json(publications);
   } catch (error) {
@@ -24,7 +24,7 @@ router.get("/banned", auth, async (req, res) => {
     const publications =
       await publicationController.getAllPublicationsAndBanned();
     if (!publications.length)
-      return res.status(200).json("No hay publicaciones guardadas!");
+      return res.status(200).json(req.t('publications.not_found'));
 
     res.status(200).json(publications);
   } catch (error) {
@@ -36,7 +36,7 @@ router.get("/important", async (req, res) => {
   try {
     const publications = await publicationController.getImportantPublications();
     if (!publications.length)
-      return res.status(200).json("No hay publicaciones destacadas!");
+      return res.status(200).json(req.t('publications.not_found_of_important'));
 
     res.status(200).json(publications);
   } catch (error) {
@@ -50,7 +50,7 @@ router.get("/:id", async (req, res) => {
   try {
     const publication = await publicationController.getPublicationById(id);
     if (!publication)
-      return res.status(404).json("No se encontró la publicación!");
+      return res.status(404).json(req.t('publications.not_found_only'));
     res.status(200).json(publication);
   } catch (error) {
     res.status(400).json(error.message);
@@ -112,8 +112,8 @@ router.delete("/:id", authRole(['globalAdmin']), async (req, res) => {
 
   try {
     const result = await publicationController.deletePublication(id);
-    if (result) return res.status(200).json('Product deleted succesfully');
-    res.status(304).json('Product does not deleted')
+    if (result) return res.status(200).json(req.t('publications.deleted'));
+    res.status(304).json(req.t('publications.not_deleted'))
   } catch (error) {
     res.status(400).json(error.message);
   }

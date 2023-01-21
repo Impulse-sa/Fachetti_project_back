@@ -1,10 +1,57 @@
 {
-   
-        "user_already_exist":"Ya existe un usuario con ese email",
-        "category":"Tiene que tener formato de email",
-   
+    "users": 
+    {
+        "user_already_exist":"Exist an user registered with that email.",
+        "user_not_found": "User not found.",
+        "users_not_found": "Users not found.",
+        "password_updated": "Password changed succesfully.",
+        "change_password_subject": "Change password of ",
+        "check_email": "Check your email!",
+        "user_deleted": "User deleted succesfully.",
+        "user_not_deleted": "User does not deleted."
+    },
+    "something_wrong": "Something went wrong.",
+    "invalid_email": "Must be a valid email.",
     "categories":
     {
-
+        "not_found": "No se encontraron categorías.",
+        "not_found_only": "No se encontró la categoría.",
+        "exist": "La categoría ya existe.",
+        "deleted": "La categoría fue eliminada correctamente.",
+        "not_deleted": "La categoría no fue eliminada"
+    },
+    "images": 
+    {
+        "not_save": "No hay imagenes guardadas",
+        "not_created": "no se pudo crear la imagen",
+        "not_attached": "Falta imagen adjunta"
+    },
+    "products":
+    {
+            "not_found": "No se encontraron productos.",
+            "not_found_only": "No se encontró el producto.",
+            "exist": "El producto ya existe.",
+            "deleted": "El producto fue eliminado correctamente.",
+            "not_deleted": "El producto no fue eliminado",
+            "not_found_of_category": "No se encontraron productos de esa categoría"
+    },
+    "publications":
+    {
+            "not_found": "No se encontraron publicaciones.",
+            "not_found_only": "No se encontró la publicación.",
+            "exist": "La publicación ya existe.",
+            "deleted": "La publicación fue eliminada correctamente.",
+            "not_deleted": "La publicación no fue eliminada",
+            "not_found_of_important": "No se encontraron publicaciones destacadas"
+    },
+    "questions":
+    {
+        "not_found": "No se encontraron consultas.",
+        "not_found_only": "No se encontró la consulta.",
+        "exist": "La consulta ya existe.",
+        "deleted": "La consulta fue eliminada correctamente.",
+        "not_deleted": "La consulta no fue eliminada",
+        "not_parameter": "Falta indicar parámetro",
+        "subject_email": "Tienes una nueva consulta de "
     }
 }

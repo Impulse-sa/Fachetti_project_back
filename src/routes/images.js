@@ -24,7 +24,7 @@ router.get("/", async (req, res) => {
     const images = await imageController.getAllImages();
 
     if (!images.length)
-      return res.status(200).json("No hay imagenes guardadas!");
+      return res.status(200).json(req.t('images.not_saved'));
 
     res.status(200).json(images);
   } catch (error) {
@@ -47,8 +47,8 @@ router.post(
           result.public_id
         );
         await fs.unlink(req.files.image.tempFilePath);
-        return res.status(201).json(imageCreated ? imageCreated : 'no se pudo crear la imagen');
-      } else return res.status(400).json('Falta imagen adjunta')
+        return res.status(201).json(imageCreated ? imageCreated : req.t('images.not_created'));
+      } else return res.status(400).json(req.t('images.not_attached'))
 
     } catch (error) {
       res.status(400).json(error.message);

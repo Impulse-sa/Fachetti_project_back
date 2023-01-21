@@ -1,11 +1,56 @@
 {
-    
-        "user_already_exist":"Exist an user registered with that email",
-        "invalid_email":"Must be a valid email",
-        "category":"Has to be a email",
-    
+    "users": 
+    {
+        "user_already_exist":"Exist an user registered with that email.",
+        "user_not_found": "User not found.",
+        "users_not_found": "Users not found.",
+        "password_updated": "Password changed succesfully.",
+        "change_password_subject": "Change password of ",
+        "check_email": "Check your email!",
+        "user_deleted": "User deleted succesfully.",
+        "user_not_deleted": "User does not deleted."
+    },
+    "something_wrong": "Something went wrong.",
+    "invalid_email": "Must be a valid email.",
     "categories":
     {
-
+        "not_found": "No categories were found.",
+        "not_found_only": "No category was found.",
+        "exist": "This category already exist.",
+        "deleted": "This category was deleted succesfully.",
+        "not_deleted": "This category was not deleted"
+    },
+    "images": 
+    {
+        "not_save": "There are no images saved",
+        "not_created": "Could not create the image",
+        "not_attached": "The image was not attached"
+    },
+    "products":
+    {
+            "not_found": "No products were found.",
+            "not_found_only": "No product was found.",
+            "exist": "This product already exist.",
+            "deleted": "This product was deleted succesfully.",
+            "not_deleted": "This product was not deleted",
+            "not_found_of_category": "No products were found of this category."
+    },
+    "publications":
+    {
+            "not_found": "No publications were found.",
+            "not_found_only": "No publication was found.",
+            "exist": "This publications already exist.",
+            "deleted": "This publications was deleted succesfully.",
+            "not_deleted": "This publications was not deleted",
+            "not_found_of_important": "No highlights publications were found."
+    },
+    "questions":
+    {
+        "not_found": "No questions were found.",
+        "not_found_only": "No question was found..",
+        "exist": "This questions already exist.",
+        "deleted": "Question was deleted succesfully.",
+        "not_deleted": "Question was not deleted",
+        "subject_email": "You have a new notification of "
     }
 }

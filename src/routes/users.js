@@ -34,7 +34,6 @@ router.post("/login", validateUserLogin, async (req, res) => {
 
     res.status(200).json(token);
   } catch (error) {
-    console.log('se genera el error')
     res.status(400).json(error.message);
   }
 });
@@ -51,12 +50,7 @@ router.post("/", authRole(['globalAdmin']), validateUserCreate, async (req, res)
     });
 
     if (emailExist) {
-      return res
-        .status(400)
-        .json(req.t('user_already_exist'))
-        // .json(
-        //   "Existe un usuario con esa dirección de email. Prueba con una nueva!"
-        // );
+      return res.status(400).json(req.t(`users.user_already_exist`))
     }
 
     const userCreated = await userController.createUser(email, password, fullName, profileImage, roleId);
@@ -72,7 +66,7 @@ router.get('/', authRole(['globalAdmin']), async (req,res)=>{
   try {
     const users = await userController.getAllUsers()
     if (!users.length) {
-      return res.status(200).json("No se encontraron usuarios");
+      return res.status(200).json(req.t('users.users_not_found'));
     }
     res.status(200).json(users)
   } catch (error) {
@@ -84,10 +78,10 @@ router.get('/:id', auth, async (req,res)=>{
   const {id} = req.params
 
   try {
-    const user = await userController.getuserEmail(id)
+    const user = await userController.getUserById(id)
     console.log(user)
     if (!user) {
-      return res.status(200).json("User not found");
+      return res.status(200).json(req.t('users.user_not_found'));
     }
     res.status(200).json(user)
   } catch (error) {
@@ -100,9 +94,8 @@ router.put('/', auth, validateUserUpdate, async (req,res)=>{
 
   try {
     const user = await userController.updateUser(data)
-    console.log(user)
     if (!user) {
-      return res.status(200).json("User not found");
+      return res.status(200).json(req.t('users.user_not_found'));
     }
     const token = jwt.sign(
       {
@@ -140,8 +133,8 @@ router.put('/changePassword', auth, validateChangePassword, async (req,res)=> {
   try {
     const user = await userController.validatePassword(email, password)
     const userUpdated = await userController.changePassword(user, newPassword)
-    if (userUpdated) return res.status(200).json('Password changed succesfully!')
-    else return res.status(400).json('Something went wrong with the new password')
+    if (userUpdated) return res.status(200).json(req.t('users.password_updated'))
+    else return res.status(400).json(req.t('something_wrong'))
 
   } catch (error) {
     res.status(400).send(error.message)
@@ -161,17 +154,17 @@ router.put('/forgotPassword', validateEmail, async (req,res) => {
       RANDOM_TOKEN,
       { expiresIn: "10m" }
     );
-    const saveUserToken = await userController.updateUserAtribute(user.id,'token',token)
-    console.log('saveUserToken', saveUserToken)
+
+    userController.updateUserAtribute(user.id,'token',token) //async
 
     const link = `${URL_FRONT}/forgotPassword/${token}`
-    const subject = 'Cambio de contraseña de'
+    const subject = req.t('users.change_password_subject')
 
     const emailStatus = await sendMail(email,subject,user.name, htmlTemplateChangePassword(link))
 
-    if (emailStatus === 'OK') res.status(200).json('Check your email!')
-    // const randomPassword = Math.random().toString(36).slice(-8)
-    else res.status(400).json('Something went wrong')
+    if (emailStatus === 'OK') res.status(200).json(req.t('users.check_email'))
+    
+    else res.status(400).json(req.t('something_wrong'))
   } catch (error) {
     res.status(400).send(error.message)
   }
@@ -185,8 +178,8 @@ router.put('/newPassword', auth,   async (req,res)=>{
     const user = await userController.validateUserToken(token)
     if (user) {
       const updatedPassword = await userController.changePassword(user,newPassword)
-      if (updatedPassword) return res.status(200).json('Password updated')
-      else return res.status(400).json('Something went wrong')
+      if (updatedPassword) return res.status(200).json(req.t('users.password_updated'))
+      else return res.status(400).json(req.t('something_wrong'))
     }
   } catch (error) {
     res.status(400).send(error.message)
@@ -198,8 +191,8 @@ router.delete("/:id", authRole(['globalAdmin']), async (req, res) => {
 
   try {
     const result = await userController.deleteUser(id);
-    if (result) return res.status(200).json('User deleted succesfully');
-    res.status(304).json('User does not deleted')
+    if (result) return res.status(200).json(req.t('users.user_deleted'));
+    res.status(304).json(req.t('users.user_deleted'))
   } catch (error) {
     res.status(400).json(error.message);
   }

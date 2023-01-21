@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
   try {
     const products = await productController.getAllProducts();
     if (!products.length) {
-      return res.status(200).json("No se encontraron productos!");
+      return res.status(200).json(req.t('products.not_found'));
     }
 
     return res.status(200).json(products);
@@ -27,7 +27,7 @@ router.get("/banned", auth, async (req, res) => {
   try {
     const products = await productController.getAllProductsAndBanned();
     if (!products.length) {
-      return res.status(200).json("No se encontraron productos!");
+      return res.status(200).json(req.t('products.not_found'));
     }
 
     return res.status(200).json(products);
@@ -43,7 +43,7 @@ router.get("/categories/:category", async (req, res) => {
     if (!products.length)
       return res
         .status(200)
-        .json("No se encontraron productos de esa categoría");
+        .json(req.t('products.not_found_of_category'));
 
     return res.status(200).json(products);
   } catch (error) {
@@ -60,7 +60,7 @@ router.get("/categories/:category/banned", auth, async (req, res) => {
     if (!products.length)
       return res
         .status(200)
-        .json("No se encontraron productos de esa categoría");
+        .json(req.t('products.not_found_of_category'));
 
     return res.status(200).json(products);
   } catch (error) {
@@ -74,7 +74,7 @@ router.get("/:id", async (req, res) => {
   try {
     const product = await productController.getProductById(id);
 
-    if (!product) return res.status(404).json("Producto no encontrado!");
+    if (!product) return res.status(404).json(req.t('products.not_found_only'));
 
     res.status(200).json(product);
   } catch (error) {
@@ -87,7 +87,7 @@ router.post( "/", auth, validateProductCreate, async (req, res) => {
 
     try {
       const productExists = await Product.findOne({ where: { name } });
-      if (productExists) return res.status(400).json("El producto ya existe!");
+      if (productExists) return res.status(400).json(req.t('products.exist'));
 
       const productCreated = await productController.createProduct(
         name,
@@ -134,8 +134,8 @@ router.delete("/:id", authRole(['globalAdmin']), async (req, res) => {
 
   try {
     const result = await productController.deleteCategory(id);
-    if (result) return res.status(200).json('Product deleted succesfully');
-    res.status(304).json('Product does not deleted')
+    if (result) return res.status(200).json(req.t('products.deleted'));
+    res.status(304).json(req.t('products.not_deleted'))
   } catch (error) {
     res.status(400).json(error.message);
   }

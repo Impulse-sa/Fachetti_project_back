@@ -10,15 +10,17 @@
         "user_deleted": "User deleted succesfully.",
         "user_not_deleted": "User does not deleted."
     },
-    "something_wrong": "Something went wrong.",
-    "invalid_email": "Must be a valid email.",
     "categories":
     {
         "not_found": "No se encontraron categorías.",
         "not_found_only": "No se encontró la categoría.",
         "exist": "La categoría ya existe.",
         "deleted": "La categoría fue eliminada correctamente.",
-        "not_deleted": "La categoría no fue eliminada"
+        "not_deleted": "La categoría no fue eliminada",
+        "validations": 
+        {
+            "length": "Min caracteres: 3, Max caracteres: 30"
+        }
     },
     "images": 
     {
@@ -33,7 +35,12 @@
             "exist": "El producto ya existe.",
             "deleted": "El producto fue eliminado correctamente.",
             "not_deleted": "El producto no fue eliminado",
-            "not_found_of_category": "No se encontraron productos de esa categoría"
+            "not_found_of_category": "No se encontraron productos de esa categoría",
+            "validations": 
+            {
+                "length": "Min caracteres: 3, Max caracteres: 30",
+                "length_title": "Min caracteres: 3, Max caracteres: 30"
+            }
     },
     "publications":
     {
@@ -42,7 +49,11 @@
             "exist": "La publicación ya existe.",
             "deleted": "La publicación fue eliminada correctamente.",
             "not_deleted": "La publicación no fue eliminada",
-            "not_found_of_important": "No se encontraron publicaciones destacadas"
+            "not_found_of_important": "No se encontraron publicaciones destacadas",
+            "validations": 
+            {
+                "length": "Min caracteres: 3, Max caracteres: 30"
+            }
     },
     "questions":
     {
@@ -52,6 +63,22 @@
         "deleted": "La consulta fue eliminada correctamente.",
         "not_deleted": "La consulta no fue eliminada",
         "not_parameter": "Falta indicar parámetro",
-        "subject_email": "Tienes una nueva consulta de "
+        "subject_email": "Tienes una nueva consulta de ",
+        "validations": 
+        {
+            "length": "Min caracteres: 3, Max caracteres: 30"
+        }
+    },
+    "something_wrong": "Something went wrong.",
+    "invalid_email": "Must be a valid email.",
+    "password": "Must have a password",
+    "validations": 
+    {
+        "exist": "This field must exist.",
+        "empty": "This must not be empty.",
+        "name": "English o spanish characters only.",
+        "image": "Must be an URL and end with image domain as jpg, png, gif, webp, jpeg.",
+        "description": "Could not have some especial values.",
+        "description_length": "Min characters: 10, Max characters: 100"
     }
 }

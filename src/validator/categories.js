@@ -2,13 +2,13 @@ const {check, query, param, body} = require('express-validator')
 const { validateResult, validateName, validateImage } = require('../utils/validateHelper')
 
 const validateCategoryCreate = [
-    body('name')
+     body('name')
         .exists()
         .not()
         .isEmpty()
         .isString()
-        .isLength({min: 3, max: 30}).withMessage('Min characters: 3, Max characters: 30')
-        .custom( value => validateName(value))
+        .isLength({min: 3, max: 30}).withMessage((value,{req}) => req.t('categories.validations.length'))
+        .custom( value => validateName(value)).withMessage((value,{req}) => req.t('validations.name'))
         .bail(),
     body('image')
         .exists()
@@ -31,14 +31,14 @@ const validateCategoryUpdate = [
         .not()
         .isEmpty()
         .isString()
-        .isLength({min: 3, max: 30}).withMessage('Min characters: 3, Max characters: 30')
-        .custom(value => validateName(value,'name')),
+        .isLength({min: 3, max: 30}).withMessage((value,{req}) => req.t('categories.validations.length'))
+        .custom(value => validateName(value)).withMessage((value,{req}) => req.t('validations.name')),
     body('image')
         .exists()
         .not()
         .isEmpty()
         .isString()
-        .custom( value => validateImage(value)),
+        .custom( value => validateImage(value)).withMessage((value,{req}) => req.t('validations.image')),
     (req,res,next)=>{
         validateResult(req,res,next)
     }

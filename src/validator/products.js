@@ -7,21 +7,22 @@ const validateProductCreate = [
         .not()
         .isEmpty()
         .isString()
-        .isLength({min: 3, max: 30}).withMessage('Min characters: 3, Max characters: 30')
-        .custom( value => validateName(value))
+        .isLength({min: 3, max: 30}).withMessage((value,{req}) => req.t('products.validations.length'))
+        .custom( value => validateName(value)).withMessage((value,{req}) => req.t('products.validations.length'))
         .bail(),
     check('image')
         .exists()
         .not()
         .isEmpty()
-        .custom(value => validateImage(value))
+        .custom(value => validateImage(value)).withMessage((value,{req}) => req.t('validations.image'))
         .bail(),
     check('description')
         .exists()
         .not()
         .isEmpty()
         .isString()
-        .custom( value => validateDescription(value))
+        .isLength({min: 10, max: 200}).withMessage((value,{req}) => req.t('validations.description_length'))
+        .custom( value => validateDescription(value)).withMessage((value,{req}) => req.t('validations.description'))
         .bail(),
     check('categoryId')
         .exists()
@@ -44,18 +45,18 @@ const validateProductUpdate = [
         .exists()
         .not()
         .isEmpty()
-        .custom( value => validateName(value))
+        .custom( value => validateName(value)).withMessage((value,{req}) => req.t('validations.name'))
         .bail(),
     body('image')
         .exists()
         .not()
         .isEmpty()
-        .custom( value => validateImage(value))
+        .custom( value => validateImage(value)).withMessage((value,{req}) => req.t('validations.image'))
         .bail(),
     check('description')
         .optional()
         .isString()
-        .custom( value => validateDescription(value))
+        .custom( value => validateDescription(value)).withMessage((value,{req}) => req.t('validations.description'))
         .bail(),
     (req,res,next)=>{
         validateResult(req,res,next)

@@ -9,14 +9,12 @@ const validateUserCreate = [
         .isEmpty()
         .toLowerCase()
         .normalizeEmail()
-        .isEmail()
-        .withMessage('Must be a valid email')
+        .isEmail().withMessage((value,{req}) => req.t('invalid_email'))
         .bail(),
     body('password')
         .exists()
         .not()
         .isEmpty()
-        .withMessage('Must have a password')
         .bail()
         .custom(value => validatePassword(value))
         .bail(),
@@ -30,7 +28,7 @@ const validateUserCreate = [
         .bail(),
     body('profileImage')
         .optional()
-        .custom( value => validateImage(value))
+        .custom( value => validateImage(value)).withMessage((value,{req}) => req.t('validations.image'))
         .bail(),
     body('roleId')
         .exists()
@@ -50,8 +48,7 @@ const validateUserLogin = [
       .isEmpty()
       .toLowerCase()
       .normalizeEmail()
-      .isEmail()
-      .withMessage('Must be a valid email')
+      .isEmail().withMessage((value,{req}) => req.t('invalid_email'))
       .bail()
       .custom( async (value) => {
         const userEmail = await findUser(value)
@@ -60,10 +57,9 @@ const validateUserLogin = [
   body('password')
       .exists()
       .not()
-      .isEmpty()
-      .withMessage('Must have a password')
+      .isEmpty().withMessage((value,{req}) => req.t('password'))
       .bail()
-      .custom(value => validatePassword(value))
+      .custom(value => validatePassword(value)).withMessage((value,{req}) => req.t('something_wrong'))
       .bail(),
   (req,res,next)=>{
     validateResult(req,res,next)
@@ -80,13 +76,12 @@ const validateUserUpdate = [
       .exists()
       .not()
       .isEmpty()
-      .withMessage('Must have a fullName')
       .bail()
       .custom(value => validateName(value,'fullName'))
       .bail(),
   body('profileImage')
       .optional()
-      .custom( value => validateImage(value))
+      .custom( value => validateImage(value)).withMessage((value,{req}) => req.t('validations.image'))
       .bail(),
   (req,res,next)=>{
     validateResult(req,res,next)
@@ -116,8 +111,7 @@ const validateChangePassword = [
       .isEmpty()
       .toLowerCase()
       .normalizeEmail()
-      .isEmail()
-      .withMessage('Must be a valid email')
+      .isEmail().withMessage((value,{req}) => req.t('invalid_email'))
       .bail()
       .custom( async (value) => {
         const userEmail = await findUser(value)
@@ -126,16 +120,14 @@ const validateChangePassword = [
     body('password')
       .exists()
       .not()
-      .isEmpty()
-      .withMessage('Must have a password')
+      .isEmpty().withMessage((value,{req}) => req.t('password'))
       .bail(),
     body('newPassword')
       .exists()
       .not()
-      .isEmpty()
-      .withMessage('Must have a newPassword')
+      .isEmpty().withMessage((value,{req}) => req.t('password'))
       .bail()
-      .custom(value => validatePassword(value))
+      .custom(value => validatePassword(value)).withMessage((value,{req}) => req.t('something_wrong'))
       .bail(),
     (req,res,next)=>{
     validateResult(req,res,next)
@@ -149,8 +141,7 @@ const validateEmail = [
       .isEmpty()
       .toLowerCase()
       .normalizeEmail()
-      .isEmail()
-      .withMessage('Must be a valid email')
+      .isEmail().withMessage((value,{req}) => req.t('invalid_email'))
       .bail()
       .custom( async (value) => {
         const userEmail = await findUser(value)
@@ -170,10 +161,9 @@ const validateNewPassword = [
   body('newPassword')
       .exists()
       .not()
-      .isEmpty()
-      .withMessage('Must have a newPassword')
+      .isEmpty().withMessage((value,{req}) => req.t('password'))
       .bail()
-      .custom(value => validatePassword(value))
+      .custom(value => validatePassword(value)).withMessage((value,{req}) => req.t('something_wrong'))
       .bail(),
   (req,res,next)=>{
   validateResult(req,res,next)

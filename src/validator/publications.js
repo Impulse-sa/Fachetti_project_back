@@ -7,8 +7,8 @@ const validatePublicationCreate = [
         .not()
         .isEmpty()
         .isString()
-        .isLength({min:3,max:30})
-        .custom( value => validateDescription(value, 'title'))
+        .isLength({min:3,max:30}).withMessage((value,{req}) => req.t('publications.validations.length'))
+        .custom( value => validateDescription(value, 'title')).withMessage((value,{req}) => req.t('validations.description'))
         .bail(),
     check('isImportant')
         .optional()
@@ -17,7 +17,7 @@ const validatePublicationCreate = [
         .exists()
         .not()
         .isEmpty()
-        .custom(value => validateImage(value))
+        .custom(value => validateImage(value)).withMessage((value,{req}) => req.t('validations.image'))
         .bail(),
     (req,res,next)=>{
         validateResult(req,res,next)
@@ -34,7 +34,8 @@ const validatePublicationUpdate = [
         .exists()
         .not()
         .isEmpty()
-        .custom( value => validateDescription(value, 'title'))
+        .isLength().withMessage((value,{req}) => req.t('publications.validations.length_title'))
+        .custom( value => validateDescription(value, 'title')).withMessage((value,{req}) => req.t('validations.description'))
         .bail(),
     body('isImportant')
         .optional()
@@ -43,14 +44,14 @@ const validatePublicationUpdate = [
         .exists()
         .not()
         .isEmpty()
-        .custom(value => validateImage(value))
+        .custom(value => validateImage(value)).withMessage((value,{req}) => req.t('validations.image'))
         .bail(),
     body('descriptiion')
         .exists()
         .not()
         .isEmpty()
-        .isLength({min:30,max:300})
-        .custom( value => validateDescription(value))
+        .isLength({min:30,max:300}).withMessage((value,{req}) => req.t('publications.validations.length'))
+        .custom( value => validateDescription(value)).withMessage((value,{req}) => req.t('validations.description'))
         .bail(),
     body('isBanned')
         .exists()

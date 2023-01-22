@@ -8,7 +8,8 @@ const validateQuestionCreate = [
         .isEmpty()
         .withMessage('Must have a name')
         .bail()
-        .custom(value => validateName(value))
+        .isLength({min: 3, max: 30}).withMessage((value,{req}) => req.t('questions.validations.length'))
+        .custom( value => validateName(value)).withMessage((value,{req}) => req.t('questions.validations.length'))
         .bail(),
     body('email')
         .exists()
@@ -17,19 +18,18 @@ const validateQuestionCreate = [
         .toLowerCase()
         .normalizeEmail()
         .isEmail()
-        .withMessage('Must be a valid email')
         .bail(),
     body('message')
         .exists()
         .not()
         .isEmpty()
         .isString()
-        .custom( value => validateDescription(value,'message'))
+        .custom( value => validateDescription(value,'message')).withMessage((value,{req}) => req.t('validations.description'))
         .bail(),
     body('phone')
         .optional()
         .isString()
-        .custom( value => validateDescription(value,'phone'))
+        .custom( value => validateDescription(value,'phone')).withMessage((value,{req}) => req.t('validations.description'))
         .bail(),
     (req,res,next)=>{
         validateResult(req,res,next)

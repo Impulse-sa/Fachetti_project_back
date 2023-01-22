@@ -10,15 +10,17 @@
         "user_deleted": "User deleted succesfully.",
         "user_not_deleted": "User does not deleted."
     },
-    "something_wrong": "Something went wrong.",
-    "invalid_email": "Must be a valid email.",
     "categories":
     {
         "not_found": "No categories were found.",
         "not_found_only": "No category was found.",
         "exist": "This category already exist.",
         "deleted": "This category was deleted succesfully.",
-        "not_deleted": "This category was not deleted"
+        "not_deleted": "This category was not deleted",
+        "validations": 
+        {
+            "length": "Min characters: 3, Max characters: 30"
+        }
     },
     "images": 
     {
@@ -33,7 +35,12 @@
             "exist": "This product already exist.",
             "deleted": "This product was deleted succesfully.",
             "not_deleted": "This product was not deleted",
-            "not_found_of_category": "No products were found of this category."
+            "not_found_of_category": "No products were found of this category.",
+            "validations": 
+            {
+                "length": "Min characters: 3, Max characters: 30",
+                "length_title": "Min characters: 3, Max characters: 30"
+            }
     },
     "publications":
     {
@@ -42,7 +49,11 @@
             "exist": "This publications already exist.",
             "deleted": "This publications was deleted succesfully.",
             "not_deleted": "This publications was not deleted",
-            "not_found_of_important": "No highlights publications were found."
+            "not_found_of_important": "No highlights publications were found.",
+            "validations": 
+            {
+                "length": "Min characters: 3, Max characters: 30."
+            }
     },
     "questions":
     {
@@ -51,6 +62,23 @@
         "exist": "This questions already exist.",
         "deleted": "Question was deleted succesfully.",
         "not_deleted": "Question was not deleted",
-        "subject_email": "You have a new notification of "
+        "subject_email": "You have a new notification of ",
+        "validations": 
+        {
+            "length": "Min characters: 3, Max characters: 30."
+        }
+
+    },
+    "something_wrong": "Something went wrong.",
+    "invalid_email": "Must be a valid email.",
+    "password": "Must have a password",
+    "validations": 
+    {
+        "exist": "This field must exist.",
+        "empty": "This must not be empty.",
+        "name": "English o spanish characters only.",
+        "image": "Must be an URL and end with image domain as jpg, png, gif, webp, jpeg.",
+        "description": "Could not have some especial values.",
+        "description_length": "Min characters: 10, Max characters: 100"
     }
 }
